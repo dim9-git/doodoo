@@ -1,7 +1,5 @@
 import { prisma } from "db/prisma"
 
-import { Ingredient, Product, ProductItem } from "@prisma/client"
-
 export const getProduct = async (id: number) => {
   const product = await prisma.product.findUnique({
     where: { id },
@@ -10,7 +8,7 @@ export const getProduct = async (id: number) => {
   return product
 }
 
-export const getProductNested = async (id: number) => {
+export const getProductDetails = async (id: number) => {
   const product = await prisma.product.findUnique({
     where: { id },
     include: {
@@ -20,9 +18,4 @@ export const getProductNested = async (id: number) => {
   })
 
   return product
-}
-
-export type ProductNested = Product & {
-  ingredients: Ingredient[]
-  items: ProductItem[]
 }

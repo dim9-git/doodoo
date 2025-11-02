@@ -2,28 +2,13 @@ import Container from "@/shared/components/container"
 import { Title } from "@/shared/components/title"
 import TopNavbar from "@/shared/components/top-navbar"
 
+import { getCategories } from "@/entities/product-categories"
+
 import Filters from "@/features/filters/components/filters"
 import GroupProducts from "@/features/products/components/group-products"
-import { prisma } from "db/prisma"
 
 export default async function Home() {
-  const categories = await prisma.category.findMany({
-    include: {
-      products: {
-        orderBy: {
-          id: "desc",
-        },
-        include: {
-          ingredients: true,
-          items: {
-            orderBy: {
-              price: "asc",
-            },
-          },
-        },
-      },
-    },
-  })
+  const categories = await getCategories()
 
   const notEmptyCategories = categories.filter(
     (category) => category.products.length > 0

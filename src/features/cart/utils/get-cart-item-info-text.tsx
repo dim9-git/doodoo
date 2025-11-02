@@ -1,19 +1,15 @@
-import {
-  mapPizzaType,
-  PizzaSize,
-  PizzaType,
-} from "@/features/products/constants/pizza"
-import { Ingredient } from "@prisma/client"
+import { mapPizzaType, PizzaType } from "@/entities/products"
+
 
 export const getCartItemInfoText = (
-  pizzaType: PizzaType,
-  pizzaSize: PizzaSize,
-  ingredients: Ingredient[]
+  pizzaType: number | null,
+  pizzaSize: number | null,
+  ingredients: Array<{ name: string }>
 ): string => {
   const details = []
 
   if (pizzaSize && pizzaType) {
-    const typeName = mapPizzaType[pizzaType]
+    const typeName = mapPizzaType[pizzaType as PizzaType]
     details.push(`${typeName} ${pizzaSize} пицца`)
   }
 

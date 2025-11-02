@@ -13,9 +13,17 @@ export type AddToCartItem = CreateCartItemRequestDTO & {
 export default function useCart() {
   const qc = new QueryClient()
 
-  const {data: cart, isError, isLoading} = useQuery({
+  const {
+    data: cart,
+    isError,
+    isLoading,
+  } = useQuery({
     queryKey: CART_KEY,
-    queryFn: async () => mapCartToState(await getCart()),
+    queryFn: async () => {
+      const dto = await getCart()
+      console.log("GOT CART DTO:", dto)
+      return mapCartToState(dto)
+    },
   })
 
   const addMut = useMutation({

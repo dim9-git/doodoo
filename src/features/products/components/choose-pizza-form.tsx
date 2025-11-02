@@ -1,25 +1,26 @@
-import React from "react"
 import { Ingredient, ProductItem } from "@prisma/client"
-
-import { ProductNested } from "../server/db"
-import ProductCover from "./product-cover"
 
 import { cn } from "@/shared/lib/utils"
 import { Title } from "@/shared/components/title"
 import { Button } from "@/shared/components/ui"
-import GroupPizzaOptions from "./group-pizza-options"
-import { PizzaSize, PizzaType, pizzaTypes } from "../constants/pizza"
 import IngredientItem from "@/shared/components/ingredient-item"
+
+import { ProductDetailsDTO } from "@/entities/products"
+import { PizzaSize, PizzaType, pizzaTypes } from "@/entities/products"
+
+import useCart from "@/features/cart/hooks/use-cart"
+
+import ProductCover from "./product-cover"
 import usePizzaOptions from "../hooks/use-pizza-options"
 import { getPizzaTextAndPrice } from "../utils/get-pizza-details"
-
+import GroupPizzaOptions from "./group-pizza-options"
 interface Props {
-  product: ProductNested
+  className?: string
+  product: ProductDetailsDTO
   name: string
   coverUrl: string
   ingredients: Ingredient[]
   items: ProductItem[]
-  className?: string
   isLoading?: boolean
   onSubmit?: () => void
 }
@@ -32,6 +33,7 @@ export default function ChoosePizzaForm({
   ingredients,
   isLoading,
   onSubmit,
+  product,
 }: Props) {
   const {
     size,
@@ -42,6 +44,7 @@ export default function ChoosePizzaForm({
     toggleIngredient,
     availableSizes,
   } = usePizzaOptions(items)
+
   const { price: totalPrice, text } = getPizzaTextAndPrice(
     items,
     size,
@@ -50,8 +53,36 @@ export default function ChoosePizzaForm({
     selectedIngredients
   )
 
+  const { addItem, adding } = useCart()
+
+  const chosenItem = items.find(
+    (item) => item.size === size && item.type === type
+  )
+  const productItemId = chosenItem ? chosenItem.id : -1
+
   const handleSubmit = () => {
     onSubmit?.()
+    console.log("Adding to cart:", {
+      productItemId,
+      size,
+      type,
+      selectedIngredients,
+    })
+    addItem({
+      productItemId,
+      ui: {
+        id: productItemId,
+        quantity: 1,
+        pizzaSize: size,
+        pizzaType: type,
+        ingredients: ingredients.filter((ingr) =>
+          selectedIngredients.has(ingr.id)
+        ),
+        name,
+        price: totalPrice,
+        coverImageUrl: coverUrl,
+      },
+    })
   }
 
   return (

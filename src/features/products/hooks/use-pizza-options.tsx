@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import { PizzaOption } from "../components/group-pizza-options"
-import { PizzaSize, PizzaType } from "../constants/pizza"
 import { useSet } from "react-use"
-import { getAvailablePizzaSizes } from "../utils"
 import { ProductItem } from "@prisma/client"
+
+import { PizzaSize, PizzaType } from "@/entities/products"
+
+import { getAvailablePizzaSizes } from "../utils"
+import { PizzaOption } from "../components/group-pizza-options"
 
 interface ReturnProps {
   size: PizzaSize

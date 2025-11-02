@@ -1,5 +1,7 @@
 import { ProductItem } from "@prisma/client"
-import { pizzaSizes, PizzaType } from "../constants/pizza"
+
+import { PizzaType, pizzaSizes } from "@/entities/products"
+
 import { PizzaOption } from "../components/group-pizza-options"
 
 /**

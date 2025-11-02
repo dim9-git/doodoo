@@ -1,11 +1,10 @@
-import React from "react"
-
 import { notFound } from "next/navigation"
 
 import Container from "@/shared/components/container"
 import { Title } from "@/shared/components/title"
 
-import { getProduct } from "@/features/products/server/db"
+import { getProduct } from "@/entities/products"
+
 import ProductCover from "@/features/products/components/product-cover"
 import GroupPizzaOptions from "@/features/products/components/group-pizza-options"
 

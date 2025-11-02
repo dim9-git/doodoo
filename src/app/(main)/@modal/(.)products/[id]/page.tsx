@@ -1,9 +1,8 @@
-import React from "react"
-
 import { notFound } from "next/navigation"
 
+import { getProductDetails } from "@/entities/products"
+
 import ChooseProductModal from "@/features/products/components/choose-product-modal"
-import { getProductNested } from "@/features/products/server/db"
 
 export default async function ProductModalPage({
   params,
@@ -11,7 +10,7 @@ export default async function ProductModalPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const product = await getProductNested(Number(id))
+  const product = await getProductDetails(Number(id))
 
   if (!product) return notFound()
 

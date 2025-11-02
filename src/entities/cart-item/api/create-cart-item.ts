@@ -7,6 +7,6 @@ export const createCartItem = async (payload: CreateCartItemRequestDTO) => {
   return (
     await http.post<{
       data: CartDTO
-    }>("/cart", payload)
+    }>("/api/cart", payload)
   ).data
 }

@@ -5,7 +5,7 @@ import React from "react"
 import { useRouter } from "next/navigation"
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 
-import { ProductNested } from "../server/db"
+import { ProductNested } from "../../../entities/products/api/get-product"
 import ChoosePizzaForm from "./choose-pizza-form"
 import ChooseProductForm from "./choose-product-form"
 

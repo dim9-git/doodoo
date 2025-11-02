@@ -3,12 +3,11 @@
 import * as React from "react"
 import { useIntersection } from "react-use"
 
-import ProductCard from "./product-card"
-import { ProductNested } from "../server/db"
-
 import { cn } from "@/shared/lib/utils"
 import { Title } from "@/shared/components/title"
 import { useCategoryStore } from "@/shared/store/category"
+
+import { ProductCard, ProductDetailsDTO } from "@/entities/products"
 
 type Props = {
   classNames?: {
@@ -17,7 +16,7 @@ type Props = {
   }
   title: string
   categoryId: number
-  products: ProductNested[]
+  products: ProductDetailsDTO[]
 }
 
 export default function GroupProducts({
@@ -50,7 +49,7 @@ export default function GroupProducts({
         {products.map((product, idx) => (
           <ProductCard
             key={`product-${idx}`}
-            payload={{
+            product={{
               ...product,
               price: product.items[0].price,
             }}

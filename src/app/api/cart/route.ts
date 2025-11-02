@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
+
 import { findOrCreateCart, updateCartTotal } from "@/entities/cart"
 import { CreateCartItemRequestDTO } from "@/entities/cart-item"
 
 export async function GET(req: NextRequest) {
   try {
-    const userId = 1
-    const token = req.cookies.get("token")?.value
+    const token = req.cookies.get("cartToken")?.value
 
     if (!token) {
       return NextResponse.json({ cart: [] })
     }
 
     const userCart = await prisma.cart.findFirst({
-      where: { OR: [{ userId }, { token }] },
+      where: { token },
       include: {
         items: {
           orderBy: { createdAt: "desc" },
@@ -28,12 +28,17 @@ export async function GET(req: NextRequest) {
     })
 
     if (userCart) {
-      return NextResponse.json({ cart: userCart.items })
+      return NextResponse.json({ data: userCart })
     }
+
+    return NextResponse.json({ data: { id: null, items: [] } })
   } catch (error) {
-    return NextResponse.json({ cart: [], error })
+    console.error("[CART_GET] error:", error)
+    return NextResponse.json(
+      { message: "[CART_GET] Server error" },
+      { status: 500 }
+    )
   }
-  return NextResponse.json({ cart: [] })
 }
 
 export async function POST(req: NextRequest) {

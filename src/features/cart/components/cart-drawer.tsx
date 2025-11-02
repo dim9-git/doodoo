@@ -2,6 +2,9 @@
 
 import React from "react"
 
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+
 import {
   Button,
   Sheet,
@@ -11,10 +14,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/shared/components/ui"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+
 import CartDrawerItem from "./cart-drawer-item"
 import { getCartItemInfoText } from "../utils/get-cart-item-info-text"
+import useCart from "../hooks/use-cart"
 
 interface Props {
   className?: string
@@ -22,6 +25,7 @@ interface Props {
 }
 
 export default function CartDrawer({ children }: Props) {
+  const { cart, isLoading, isError } = useCart()
   const onClickCountButton = (
     id: number,
     quantity: number,
@@ -29,6 +33,8 @@ export default function CartDrawer({ children }: Props) {
   ) => {
     console.log(id, quantity, type)
   }
+
+  console.log("CART DRAWER CART:", cart, isLoading, isError)
 
   return (
     <Sheet>
@@ -43,18 +49,24 @@ export default function CartDrawer({ children }: Props) {
         {/* Items */}
         <div className="-mx-6 overflow-auto flex-1">
           <div className="mb-2">
-            <CartDrawerItem
-              id={1}
-              imageUrl="https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp"
-              details={getCartItemInfoText(2, 20, [
-                { name: "Грибы" },
-                { name: "Ветчина" },
-              ])}
-              name="Пепперони Фреш с перцем"
-              price={560}
-              quantity={2}
-              className="mb-6"
-            />
+            {cart?.items
+              ? cart.items.map((item) => (
+                  <CartDrawerItem
+                    key={item.id}
+                    id={item.id}
+                    imageUrl={item.coverImageUrl ?? ""}
+                    details={getCartItemInfoText(
+                      item.pizzaType,
+                      item.pizzaSize,
+                      item.ingredients
+                    )}
+                    name={item.name}
+                    price={item.price}
+                    quantity={item.quantity}
+                    className="mb-6"
+                  />
+                ))
+              : null}
           </div>
         </div>
 
