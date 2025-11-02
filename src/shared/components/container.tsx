@@ -1,0 +1,16 @@
+import React from "react"
+
+import { cn } from "@/shared/lib/utils"
+
+interface Props {
+  className?: string
+  children: React.ReactNode
+}
+
+export default function Container({ className, children }: Props) {
+  return (
+    <div className={cn("mx-auto w-full max-w-[1280px]", className)}>
+      {children}
+    </div>
+  )
+}
