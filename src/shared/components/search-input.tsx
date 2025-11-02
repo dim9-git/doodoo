@@ -72,7 +72,7 @@ export default function SearchInput({ className }: Props) {
                 <Link
                   key={product.id}
                   className="flex items-center gap-3 w-full px-3 py-2 hover:bg-primary/10"
-                  href={`/product/${product.id}`}
+                  href={`/products/${product.id}`}
                 >
                   {product.coverUrl ? (
                     <img
