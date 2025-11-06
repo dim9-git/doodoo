@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
 
+import { updateCartTotalByToken } from "@/entities/cart"
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = Number(params.id)
+    const id = Number((await params).id)
     const body = await req.json()
     const token = req.cookies.get("cartToken")?.value
 
@@ -34,6 +36,17 @@ export async function PATCH(
       },
     })
 
+    const userCart = await updateCartTotalByToken(token)
+
+    if (!userCart) {
+      return NextResponse.json(
+        { message: "User cart not found" },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({ data: userCart })
+
     // TODO: Return updated item
   } catch (error) {
     console.error("[CART_PATCH] error:", error)
@@ -49,12 +62,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = Number(params.id)
-    const token = req.cookies.get("cartToken")?.value
-
-    if (!token) {
-      return NextResponse.json({ message: "No cart token was found" })
-    }
+    const id = Number((await params).id)
+    console.log("DELETE CART ITEM ID:", id)
 
     const cartItem = await prisma.cartItem.findFirst({
       where: {
@@ -72,6 +81,24 @@ export async function DELETE(
     await prisma.cartItem.delete({
       where: { id },
     })
+
+    const token = req.cookies.get("cartToken")?.value
+    if (!token) {
+      return NextResponse.json({ message: "No cart token was found" })
+    }
+
+    const userCart = await updateCartTotalByToken(token)
+
+    if (!userCart) {
+      return NextResponse.json(
+        { message: "User cart not found" },
+        { status: 404 }
+      )
+    }
+
+    console.log("UPDATED CART AFTER DELETE:", userCart)
+
+    return NextResponse.json({ data: userCart })
 
     // TODO: Return deleted item ID
   } catch (error) {

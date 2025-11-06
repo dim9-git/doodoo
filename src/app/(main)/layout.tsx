@@ -1,4 +1,6 @@
-import Header from "@/shared/components/header"
+import { Toaster } from "@/shared/ui/sh"
+
+import Header from "@/widgets/header"
 
 export default function MainLayout({
   children,
@@ -14,6 +16,7 @@ export default function MainLayout({
         {children}
       </main>
       {modal}
+      <Toaster />
     </>
   )
 }

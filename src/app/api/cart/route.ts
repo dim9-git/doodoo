@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
 
-import { findOrCreateCart, updateCartTotal } from "@/entities/cart"
-import { CreateCartItemRequestDTO } from "@/entities/cart-item"
+import { findByToken, findOrCreateCart, updateCartTotal } from "@/entities/cart"
+import { CreateCartItemRequestDTO } from "@/entities/cart-items"
+// import logger from "@/shared/lib/logger"
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,20 +13,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ cart: [] })
     }
 
-    const userCart = await prisma.cart.findFirst({
-      where: { token },
-      include: {
-        items: {
-          orderBy: { createdAt: "desc" },
-          include: {
-            productItem: {
-              include: { product: true },
-            },
-            ingredients: true,
-          },
-        },
-      },
-    })
+    const userCart = await findByToken(token)
 
     if (userCart) {
       return NextResponse.json({ data: userCart })
@@ -49,9 +37,10 @@ export async function POST(req: NextRequest) {
       token = crypto.randomUUID()
     }
 
-    const userCart = await findOrCreateCart(token)
     const data = (await req.json()) as CreateCartItemRequestDTO
+    let userCart = await findOrCreateCart(token)
 
+    // change to in-memory filtering
     const findCartItem = await prisma.cartItem.findFirst({
       where: {
         cartId: userCart.id,
@@ -70,19 +59,22 @@ export async function POST(req: NextRequest) {
         where: { id: findCartItem.id },
         data: { quantity: findCartItem.quantity + 1 },
       })
+    } else {
+      await prisma.cartItem.create({
+        data: {
+          cartId: userCart.id,
+          productItemId: data.productItemId,
+          ingredients: {
+            connect: data.ingredientsIds?.map((id) => ({ id })),
+          },
+        },
+      })
     }
 
-    await prisma.cartItem.create({
-      data: {
-        cartId: userCart.id,
-        productItemId: data.productItemId,
-        ingredients: {
-          connect: data.ingredientsIds?.map((id) => ({ id })),
-        },
-      },
-    })
+    userCart = await findOrCreateCart(token)
+    const updatedCart = await updateCartTotal(userCart)
+    // logger.info("[CART_POST] updatedCart", updatedCart)
 
-    const updatedCart = await updateCartTotal(token)
     const res = NextResponse.json({
       data: updatedCart,
     })

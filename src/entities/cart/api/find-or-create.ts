@@ -1,15 +1,22 @@
-import { prisma } from "db/prisma"
+import { prisma, TransactionClient } from "db/prisma"
+import { withItems } from "../model/cart.relations"
 
-export async function findOrCreateCart(token: string) {
-  let userCart = await prisma.cart.findFirst({
+export async function findOrCreateCart(
+  token: string,
+  client?: TransactionClient
+) {
+  const db = client || prisma
+  let userCart = await db.cart.findFirst({
     where: { token },
+    include: withItems,
   })
 
   if (!userCart) {
-    userCart = await prisma.cart.create({
+    userCart = await db.cart.create({
       data: {
         token,
       },
+      include: withItems,
     })
   }
 

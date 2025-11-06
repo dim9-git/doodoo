@@ -1,11 +1,11 @@
-import Container from "@/shared/components/container"
-import { Title } from "@/shared/components/title"
-import TopNavbar from "@/shared/components/top-navbar"
+import Container from "@/shared/ui/container"
+import { Title } from "@/shared/ui/title"
 
-import { getCategories } from "@/entities/product-categories"
+import { getCategories, CatGroupProducts } from "@/entities/product-categories"
 
-import Filters from "@/features/filters/components/filters"
-import GroupProducts from "@/features/products/components/group-products"
+import { Filters } from "@/features/filter-products"
+
+import TopNavbar from "@/widgets/top-navbar.tsx/ui/top-navbar"
 
 export default async function Home() {
   const categories = await getCategories()
@@ -23,16 +23,17 @@ export default async function Home() {
       <TopNavbar />
 
       <Container className="mt-10 pb-14">
-        <div className="flex gap-[60px]">
+        <div className="flex gap-[60px] max-xl:flex-col">
           {/* Filters */}
-          <div className="max-w-[250px] w-full">
-            <Filters />
+          <div className="xl:max-w-[250px] w-full">
+            <Title text="Фильтры" size="sm" className="font-bold" />
+            <Filters className="max-xl:flex max-xl:justify-between" />
           </div>
 
           {/* Products */}
           <div className="flex-1 space-y-16">
             {notEmptyCategories.map((category) => (
-              <GroupProducts
+              <CatGroupProducts
                 key={category.id}
                 title={category.name}
                 categoryId={category.id}

@@ -1,42 +1,11 @@
-import { calcCartItemTotalPrice } from "@/entities/cart-item"
-import { CartDTO } from "../dto/cart.dto"
+import { CartStateItem, mapCartItemToStateItem } from "@/entities/cart-items"
 
-export type CartStateItem = {
-  id: number
-  quantity: number
-  name: string
-  coverImageUrl: string | null
-  price: number
-  pizzaSize: number | null
-  pizzaType: number | null
-  ingredients: {
-    id: number
-    name: string
-    price: number
-  }[]
-}
+import { CartDTO } from "../dto/cart.dto"
 
 export interface CartState {
   items: CartStateItem[]
   total: number
 }
-
-export const mapCartItemToStateItem = (
-  item: CartDTO["items"][0]
-): CartStateItem => ({
-  id: item.id,
-  quantity: item.quantity,
-  name: item.productItem.product.name,
-  coverImageUrl: item.productItem.product.coverUrl,
-  price: calcCartItemTotalPrice(item),
-  pizzaSize: item.productItem.size,
-  pizzaType: item.productItem.type,
-  ingredients: item.ingredients.map((ingr) => ({
-    id: ingr.id,
-    name: ingr.name,
-    price: ingr.price,
-  })),
-})
 
 export const mapCartToState = (cart: CartDTO): CartState => {
   const items: CartStateItem[] = cart.items.map((item) =>

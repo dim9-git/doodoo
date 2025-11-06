@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation"
 
-import Container from "@/shared/components/container"
-import { Title } from "@/shared/components/title"
+import Container from "@/shared/ui/container"
+import { Title } from "@/shared/ui/title"
 
 import { getProduct } from "@/entities/products"
+import ProductCover from "@/entities/products/ui/product-cover"
 
-import ProductCover from "@/features/products/components/product-cover"
-import GroupPizzaOptions from "@/features/products/components/group-pizza-options"
+import { GroupPizzaOptions } from "@/features/choose-product"
 
 export default async function ProductPage({
   params,

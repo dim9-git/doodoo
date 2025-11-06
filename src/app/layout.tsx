@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import { Nunito } from "next/font/google"
 
-import "./globals.css"
-import Providers from "./providers"
-
 import { cn } from "@/shared/lib/utils"
+
+import { Providers } from "@/widgets/providers"
+
+import "./globals.css"
 
 const nunito = Nunito({
   variable: "--font-nunito",

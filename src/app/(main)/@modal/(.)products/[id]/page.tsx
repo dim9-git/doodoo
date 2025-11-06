@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 
 import { getProductDetails } from "@/entities/products"
 
-import ChooseProductModal from "@/features/products/components/choose-product-modal"
+import { ChooseProductModal } from "@/features/choose-product"
 
 export default async function ProductModalPage({
   params,
