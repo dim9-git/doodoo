@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
 import { CartStateItem, CreateCartItemRequestDTO } from "@/entities/cart-items"
@@ -16,9 +15,9 @@ export function useAddToCart() {
   const {
     mutate: addItem,
     mutateAsync: addItemAsync,
-    isPending: isAddPending,
-    isError: isAddError,
-    isSuccess: isAddSuccess,
+    isPending,
+    isError,
+    isSuccess,
   } = useMutation({
     mutationFn: async (newItem: AddToCartItem) => {
       console.log("[MUTATE ADD] payload:", newItem)
@@ -53,18 +52,15 @@ export function useAddToCart() {
     },
     onError: (_err, _newItem, context) => {
       if (context?.prev) qc.setQueryData<CartState>(CART_KEY, context.prev)
-
-      toast.error("Ошибка при добавлении товара")
     },
     onSuccess: (mappedCart) => {
       // replace optimistic with server truth
       qc.setQueryData<CartState>(CART_KEY, mappedCart)
-      toast.success("Товар добавлен в корзину")
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: CART_KEY })
     },
   })
 
-  return { addItem, addItemAsync, isAddPending, isAddError, isAddSuccess }
+  return { addItem, addItemAsync, isPending, isError, isSuccess }
 }

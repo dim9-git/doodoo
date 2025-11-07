@@ -12,3 +12,7 @@ export interface CreateCartItemRequestDTO {
   ingredientsIds?: number[]
   quantity?: number
 }
+
+export interface UpdateCartItemRequestDTO {
+  quantity: number
+}

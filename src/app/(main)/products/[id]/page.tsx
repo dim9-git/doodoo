@@ -6,7 +6,7 @@ import { Title } from "@/shared/ui/title"
 import { getProduct } from "@/entities/products"
 import ProductCover from "@/entities/products/ui/product-cover"
 
-import { GroupPizzaOptions } from "@/features/choose-product"
+import { GroupPizzaParams } from "@/features/pizza-builder"
 
 export default async function ProductPage({
   params,
@@ -28,7 +28,7 @@ export default async function ProductPage({
 
           <p className="text-gray-400">{product.description}</p>
 
-          <GroupPizzaOptions
+          <GroupPizzaParams
             value="1"
             items={[
               {

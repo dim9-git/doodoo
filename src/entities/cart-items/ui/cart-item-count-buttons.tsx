@@ -4,7 +4,7 @@ import { CartItemCountIconButton } from "./cart-item-count-icon-button"
 export interface CountButtonProps {
   value?: number
   size?: "sm" | "lg"
-  onClick?: (type: "plus" | "minus") => void
+  onClick: (type: "plus" | "minus") => void
   className?: string
 }
 
@@ -22,7 +22,7 @@ export function CartItemCountButton({
       )}
     >
       <CartItemCountIconButton
-        onClick={() => onClick?.("minus")}
+        onClick={() => onClick("minus")}
         disabled={value === 1}
         size={size}
         type="minus"
@@ -31,7 +31,7 @@ export function CartItemCountButton({
       <b className={size === "sm" ? "text-sm" : "text-md"}>{value}</b>
 
       <CartItemCountIconButton
-        onClick={() => onClick?.("plus")}
+        onClick={() => onClick("plus")}
         size={size}
         type="plus"
       />

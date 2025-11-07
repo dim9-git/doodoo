@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
 
-import { updateCartTotalByToken } from "@/entities/cart"
+import {
+  updateCartTotal,
+  updateCartTotalByToken,
+  withItems,
+} from "@/entities/cart"
+import { UpdateCartItemRequestDTO } from "@/entities/cart-items"
+
 
 export async function PATCH(
   req: NextRequest,
@@ -9,7 +15,7 @@ export async function PATCH(
 ) {
   try {
     const id = Number((await params).id)
-    const body = await req.json()
+    const body = await req.json() as UpdateCartItemRequestDTO
     const token = req.cookies.get("cartToken")?.value
 
     if (!token) {
@@ -29,23 +35,33 @@ export async function PATCH(
       )
     }
 
-    await prisma.cartItem.update({
+    const updatedCartItem = await prisma.cartItem.update({
       where: { id },
       data: {
         quantity: body.quantity,
       },
+      select: {
+        Cart: {
+          include: withItems,
+        },
+      },
     })
-
-    const userCart = await updateCartTotalByToken(token)
+    const userCart = updatedCartItem.Cart
 
     if (!userCart) {
+      throw new Error("User cart not found")
+    }
+
+    const updatedCart = await updateCartTotal(userCart)
+
+    if (!updatedCart) {
       return NextResponse.json(
         { message: "User cart not found" },
         { status: 404 }
       )
     }
 
-    return NextResponse.json({ data: userCart })
+    return NextResponse.json({ data: updatedCart })
 
     // TODO: Return updated item
   } catch (error) {

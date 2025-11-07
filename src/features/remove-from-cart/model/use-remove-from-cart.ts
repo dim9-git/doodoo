@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
-import { calcCartStateItemTotalPrice } from "@/entities/cart-items"
 
 import { removeCartItem } from "../api/remove-cart-item"
 
@@ -11,8 +10,9 @@ export function useRemoveFromCart() {
   const {
     mutate: removeItem,
     mutateAsync: removeItemAsync,
-    isPending: isRemovePending,
-    isError: isRemoveError,
+    isPending,
+    isError,
+    isSuccess,
   } = useMutation({
     mutationFn: async (id: number) => {
       return mapCartToState(await removeCartItem(id))
@@ -58,5 +58,5 @@ export function useRemoveFromCart() {
     },
   })
 
-  return { removeItem, removeItemAsync, isRemovePending, isRemoveError }
+  return { removeItem, removeItemAsync, isPending, isSuccess, isError }
 }

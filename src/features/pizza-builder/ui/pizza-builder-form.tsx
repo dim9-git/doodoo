@@ -1,5 +1,4 @@
 import { Ingredient, ProductItem } from "@prisma/client"
-import { toast } from "sonner"
 
 import { cn } from "@/shared/lib/utils"
 import { Title } from "@/shared/ui/title"
@@ -7,7 +6,6 @@ import { Button } from "@/shared/ui/sh"
 
 import { IngredientItem } from "@/entities/ingredients"
 import {
-  ProductDetailsDTO,
   PizzaSize,
   PizzaType,
   pizzaTypes,
@@ -15,23 +13,22 @@ import {
   getPizzaTextAndPrice,
 } from "@/entities/products"
 
-import { useAddToCart } from "@/features/add-to-cart"
+import { AddToCartItem } from "@/features/add-to-cart"
 
-import GroupPizzaOptions from "./group-pizza-options"
 import { usePizzaConfiguration } from "../model/use-pizza-configuration"
+import GroupPizzaOptions from "./group-pizza-params"
 
 interface Props {
   className?: string
-  product: ProductDetailsDTO
   name: string
   coverUrl: string
   ingredients: Ingredient[]
   items: ProductItem[]
   isLoading?: boolean
-  onSubmit?: () => void
+  onSubmit: (payload: AddToCartItem) => void
 }
 
-export default function ChoosePizzaForm({
+export default function PizzaBuidlerForm({
   className,
   name,
   coverUrl,
@@ -39,7 +36,6 @@ export default function ChoosePizzaForm({
   ingredients,
   isLoading,
   onSubmit,
-  product,
 }: Props) {
   const {
     size,
@@ -49,9 +45,10 @@ export default function ChoosePizzaForm({
     selectedIngredients,
     toggleIngredient,
     availableSizes,
+    currentItem,
   } = usePizzaConfiguration(items)
 
-  const { price: totalPrice, text } = getPizzaTextAndPrice(
+  const { price, text } = getPizzaTextAndPrice(
     items,
     size,
     type,
@@ -59,40 +56,31 @@ export default function ChoosePizzaForm({
     selectedIngredients
   )
 
-  const { addItem } = useAddToCart()
+  const productItemId = currentItem ? currentItem.id : -1
 
-  const chosenItem = items.find(
-    (item) => item.size === size && item.type === type
-  )
-  const productItemId = chosenItem ? chosenItem.id : -1
-
-  const handleSubmit = () => {
-    onSubmit?.()
+  const onClickAdd = () => {
     console.log("Adding to cart:", {
       productItemId,
       size,
       type,
       selectedIngredients,
     })
-    addItem(
-      {
-        productItemId,
-        ui: {
-          id: productItemId,
-          quantity: 1,
-          pizzaSize: size,
-          pizzaType: type,
-          ingredients: ingredients.filter((ingr) =>
-            selectedIngredients.has(ingr.id)
-          ),
-          name,
-          price: totalPrice,
-          coverImageUrl: coverUrl,
-        },
-        ingredientsIds: Array.from(selectedIngredients),
+    onSubmit({
+      productItemId,
+      ui: {
+        id: productItemId,
+        quantity: 1,
+        pizzaSize: size,
+        pizzaType: type,
+        ingredients: ingredients.filter((ingr) =>
+          selectedIngredients.has(ingr.id)
+        ),
+        name,
+        price,
+        coverImageUrl: coverUrl,
       },
-       
-    )
+      ingredientsIds: Array.from(selectedIngredients),
+    })
   }
 
   return (
@@ -137,10 +125,10 @@ export default function ChoosePizzaForm({
 
         <Button
           isLoading={isLoading}
-          onClick={() => handleSubmit()}
+          onClick={onClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
-          Добавить в корзину за {totalPrice} ₽
+          Добавить в корзину за {price} ₽
         </Button>
       </div>
     </div>

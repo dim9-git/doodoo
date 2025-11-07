@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
 
-import { findByToken, findOrCreateCart, updateCartTotal } from "@/entities/cart"
+import {
+  findOrCreateCart,
+  updateCartTotal,
+  withItems,
+  findCartItem,
+  findCartByToken,
+} from "@/entities/cart"
 import { CreateCartItemRequestDTO } from "@/entities/cart-items"
+
 // import logger from "@/shared/lib/logger"
 
 export async function GET(req: NextRequest) {
@@ -13,7 +20,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ cart: [] })
     }
 
-    const userCart = await findByToken(token)
+    const userCart = await findCartByToken(token)
 
     if (userCart) {
       return NextResponse.json({ data: userCart })
@@ -38,29 +45,29 @@ export async function POST(req: NextRequest) {
     }
 
     const data = (await req.json()) as CreateCartItemRequestDTO
-    let userCart = await findOrCreateCart(token)
+    const userCart = await findOrCreateCart(token)
 
-    // change to in-memory filtering
-    const findCartItem = await prisma.cartItem.findFirst({
-      where: {
-        cartId: userCart.id,
-        productItemId: data.productItemId,
-        ingredients: {
-          every: {
-            id: { in: data.ingredientsIds },
+    const cartItem = findCartItem(
+      userCart,
+      data.productItemId,
+      data.ingredientsIds
+    )
+
+    let newCart
+    // Если товар уже есть в корзине, увеличиваем количество
+    if (cartItem) {
+      const updatedCartItem = await prisma.cartItem.update({
+        where: { id: cartItem.id },
+        data: { quantity: cartItem.quantity + 1 },
+        select: {
+          Cart: {
+            include: withItems,
           },
         },
-      },
-    })
-
-    // Если товар уже есть в корзине, увеличиваем количество
-    if (findCartItem) {
-      await prisma.cartItem.update({
-        where: { id: findCartItem.id },
-        data: { quantity: findCartItem.quantity + 1 },
       })
+      newCart = updatedCartItem.Cart
     } else {
-      await prisma.cartItem.create({
+      const createdCartItem = await prisma.cartItem.create({
         data: {
           cartId: userCart.id,
           productItemId: data.productItemId,
@@ -68,12 +75,20 @@ export async function POST(req: NextRequest) {
             connect: data.ingredientsIds?.map((id) => ({ id })),
           },
         },
+        select: {
+          Cart: {
+            include: withItems,
+          },
+        },
       })
+      newCart = createdCartItem.Cart
     }
 
-    userCart = await findOrCreateCart(token)
-    const updatedCart = await updateCartTotal(userCart)
-    // logger.info("[CART_POST] updatedCart", updatedCart)
+    if (!newCart) {
+      throw new Error("Something went wrong with updating cart")
+    }
+
+    const updatedCart = await updateCartTotal(newCart)
 
     const res = NextResponse.json({
       data: updatedCart,

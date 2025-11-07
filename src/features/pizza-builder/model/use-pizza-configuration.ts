@@ -10,7 +10,7 @@ import {
   PizzaType,
 } from "@/entities/products"
 
-import { PizzaOption } from "../ui/group-pizza-options"
+import { PizzaParam } from "../ui/group-pizza-params"
 
 interface ReturnProps {
   size: PizzaSize
@@ -19,7 +19,8 @@ interface ReturnProps {
   setType: (type: PizzaType) => void
   selectedIngredients: Set<number>
   toggleIngredient: (id: number) => void
-  availableSizes: PizzaOption[]
+  availableSizes: PizzaParam[]
+  currentItem: ProductItem | undefined
 }
 
 export function usePizzaConfiguration(items: ProductItem[]): ReturnProps {
@@ -51,6 +52,10 @@ export function usePizzaConfiguration(items: ProductItem[]): ReturnProps {
     }
   }
 
+  const currentItem = items.find(
+    (item) => item.size === size && item.type === type
+  )
+
   return {
     size,
     setSize: _setSize,
@@ -59,5 +64,6 @@ export function usePizzaConfiguration(items: ProductItem[]): ReturnProps {
     selectedIngredients,
     toggleIngredient,
     availableSizes,
+    currentItem,
   }
 }

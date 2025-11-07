@@ -1,1 +1,1 @@
-export { useAddToCart } from "./model/use-add-to-cart"
+export { useAddToCart, type AddToCartItem } from "./model/use-add-to-cart"

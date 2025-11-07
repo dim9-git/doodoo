@@ -8,7 +8,7 @@ import Container from "@/shared/ui/container"
 import { Button } from "@/shared/ui/sh"
 import { cn } from "@/shared/lib/utils"
 
-import { findByToken } from "@/entities/cart"
+import { findCartByToken } from "@/entities/cart"
 
 import HeaderCartButton from "./header-cart-button"
 
@@ -19,7 +19,7 @@ interface Props {
 
 export default async function Header({ className, hasSearch = true }: Props) {
   const token = (await cookies()).get("cartToken")?.value
-  const cart = token ? await findByToken(token) : null
+  const cart = token ? await findCartByToken(token) : null
 
   return (
     <header className={cn("border border-b", className)}>

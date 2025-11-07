@@ -2,7 +2,7 @@ import { ProductItem } from "@prisma/client"
 
 import { PizzaType, pizzaSizes } from "@/entities/products"
 
-import { PizzaOption } from "../../../features/choose-product/ui/group-pizza-options"
+import { PizzaParam } from "@/features/pizza-builder"
 
 /**
  * Функция для получения доступных размеров пиццы по типу
@@ -12,12 +12,12 @@ import { PizzaOption } from "../../../features/choose-product/ui/group-pizza-opt
  * ```
  * @param items
  * @param type
- * @returns PizzaOption[]
+ * @returns PizzaParam[]
  */
 export const getAvailablePizzaSizes = (
   items: ProductItem[],
   type: PizzaType
-): PizzaOption[] => {
+): PizzaParam[] => {
   const filteredPizzasByType = items.filter((item) => item.type === type)
   const availableSizes = pizzaSizes.map((item) => ({
     name: item.name,

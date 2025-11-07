@@ -1,26 +1,47 @@
+import { ProductItem } from "@prisma/client"
+
 import { cn } from "@/shared/lib/utils"
 import { Title } from "@/shared/ui/title"
 import { Button } from "@/shared/ui/sh"
 
 import { ProductCover } from "@/entities/products"
 
+import { AddToCartItem } from "@/features/add-to-cart"
+
 interface Props {
   className?: string
+  item: ProductItem
   name: string
   coverUrl: string
   price: number
   isLoading?: boolean
-  onSubmit?: () => void
+  onSubmit: (payload: AddToCartItem) => void
 }
 
 export default function ChooseSimpleProductForm({
   className,
+  item,
   name,
   coverUrl,
   price,
   isLoading,
   onSubmit,
 }: Props) {
+  const onClickAdd = () => {
+    onSubmit({
+      productItemId: item.id,
+      ui: {
+        id: item.id,
+        name,
+        coverImageUrl: coverUrl,
+        price,
+        quantity: 1,
+        pizzaSize: null,
+        pizzaType: null,
+        ingredients: [],
+      },
+    })
+  }
   return (
     <div className={cn("flex flex-1", className)}>
       <div className="flex items-center justify-center flex-1 relative w-full">
@@ -32,7 +53,7 @@ export default function ChooseSimpleProductForm({
 
         <Button
           isLoading={isLoading}
-          onClick={() => onSubmit?.()}
+          onClick={onClickAdd}
           className="w-full h-[55px] mt-10 px-10 rounded-[18px] text-base"
         >
           Добавить в корзину за {price} ₽

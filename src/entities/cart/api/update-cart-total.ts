@@ -4,7 +4,7 @@ import { calcCartItemTotalPrice } from "@/entities/cart-items"
 
 import { withItems } from "../model/cart.relations"
 import { CartDTO } from "./dto/cart.dto"
-import { findByToken } from "./find-by-token"
+import { findCartByToken } from "./find-by-token"
 
 export async function updateCartTotal(
   userCart: CartDTO,
@@ -33,7 +33,7 @@ export async function updateCartTotalByToken(
 ) {
   const db = client || prisma
 
-  const userCart = await findByToken(token)
+  const userCart = await findCartByToken(token)
   if (!userCart) return
 
   return await updateCartTotal(userCart, db)

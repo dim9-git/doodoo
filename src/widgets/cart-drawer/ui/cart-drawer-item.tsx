@@ -1,10 +1,13 @@
+import { useEffect, useState } from "react"
 import { Trash2Icon } from "lucide-react"
+import { useDebounce } from "react-use"
 
 import { cn } from "@/shared/lib/utils"
 
 import { CartItem, CartItemProps } from "@/entities/cart-items"
 
 import { useRemoveFromCart } from "@/features/remove-from-cart"
+import { useUpdateCart } from "@/features/update-cart"
 
 interface Props extends CartItemProps {
   className?: string
@@ -21,6 +24,31 @@ export default function CartDrawerItem({
   disabled,
 }: Props) {
   const { removeItem } = useRemoveFromCart()
+  const { updateItem } = useUpdateCart()
+
+  const [localQty, setLocalQty] = useState(quantity)
+
+  useEffect(() => {
+    setLocalQty(quantity)
+  }, [quantity])
+
+  useDebounce(
+    () => {
+      if (localQty !== quantity) {
+        updateItem({ id, quantity: localQty })
+      }
+    },
+    350,
+    [localQty]
+  )
+
+  const onRemove = () => {
+    removeItem(id)
+  }
+
+  const onChange = (type: "plus" | "minus") => {
+    setLocalQty((prev) => (type === "minus" ? Math.max(1, prev - 1) : prev + 1))
+  }
 
   return (
     <div
@@ -35,14 +63,11 @@ export default function CartDrawerItem({
         <hr className="my-3" />
 
         <div className="flex items-center justify-between">
-          <CartItem.CountButtons
-            onClick={(type) => console.log(type)}
-            value={quantity}
-          />
+          <CartItem.CountButtons onClick={onChange} value={localQty} />
 
           <button
             className="flex items-center gap-3"
-            onClick={() => removeItem(id)}
+            onClick={onRemove}
             disabled={disabled}
           >
             <CartItem.Price value={price} />

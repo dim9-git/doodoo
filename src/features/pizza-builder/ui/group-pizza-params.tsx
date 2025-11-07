@@ -2,20 +2,20 @@
 
 import { cn } from "@/shared/lib/utils"
 
-export type PizzaOption = {
+export type PizzaParam = {
   name: string
   value: string
   disabled?: boolean
 }
 
 interface Props {
-  items: PizzaOption[]
-  onClick?: (value: PizzaOption["value"]) => void
-  value?: PizzaOption["value"]
+  items: PizzaParam[]
+  onClick?: (value: PizzaParam["value"]) => void
+  value?: PizzaParam["value"]
   className?: string
 }
 
-export default function GroupPizzaOptions({
+export default function GroupPizzaParams({
   items,
   onClick,
   value,

@@ -1,20 +1,23 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
+import { toast } from "sonner"
 
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogDescription,
+  DialogHeader,
 } from "@/shared/ui/sh"
 import { cn } from "@/shared/lib/utils"
 
 import { ProductDetailsDTO } from "@/entities/products"
 
-import ChoosePizzaForm from "./choose-pizza-form"
-import ChooseSimpleProductForm from "./choose-simple-product-form"
+import { AddToCartItem, useAddToCart } from "@/features/add-to-cart"
+import { PizzaBuilderForm } from "@/features/pizza-builder"
+
+import ChooseSimpleProductForm from "../ui/choose-simple-product-form"
 
 interface Props {
   product: ProductDetailsDTO
@@ -23,10 +26,25 @@ interface Props {
 
 export default function ChooseProductModal({ product, className }: Props) {
   const router = useRouter()
+  const { addItemAsync, isPending: isLoading } = useAddToCart()
 
-  if (!product) return null
+  const firstItem = product.items[0]
+  const isPizza = Boolean(firstItem.type)
 
-  const isPizza = Boolean(product.items[0].type)
+  const onSubmit = async (payload: AddToCartItem) => {
+    await addItemAsync(payload, {
+      onSuccess: () => {
+        toast.success("Товар добавлен в корзину", {
+          
+        })
+      },
+      onError: () => {
+        toast.error("Ошибка при добавлении товара")
+      },
+    })
+
+    router.back()
+  }
 
   return (
     <Dialog open={true} onOpenChange={() => router.back()}>
@@ -36,28 +54,28 @@ export default function ChooseProductModal({ product, className }: Props) {
           className
         )}
       >
-        <VisuallyHidden.Root>
+        <DialogHeader className="sr-only">
           <DialogTitle>Выберите продукт</DialogTitle>
           <DialogDescription>Выберите продукт</DialogDescription>
-        </VisuallyHidden.Root>
+        </DialogHeader>
 
         {isPizza ? (
-          <ChoosePizzaForm
-            product={product}
+          <PizzaBuilderForm
             name={product.name}
             coverUrl={product.coverUrl ?? ""}
             items={product.items}
             ingredients={product.ingredients}
-            onSubmit={() => {}}
-            isLoading={false}
+            onSubmit={onSubmit}
+            isLoading={isLoading}
           />
         ) : (
           <ChooseSimpleProductForm
-            price={0}
+            item={firstItem}
             name={product.name}
             coverUrl={product.coverUrl ?? ""}
-            onSubmit={() => {}}
-            isLoading={false}
+            price={firstItem.price}
+            onSubmit={onSubmit}
+            isLoading={isLoading}
           />
         )}
       </DialogContent>
