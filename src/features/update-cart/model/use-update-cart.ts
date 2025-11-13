@@ -5,7 +5,7 @@ import { UpdateCartItemPayload } from "@/entities/cart-items"
 
 import { updateCartItem } from "../api/update-cart-item"
 
-type UpdateCartVariables = UpdateCartItemPayload
+export type UpdateCartVariables = UpdateCartItemPayload
 
 export const useUpdateCart = () => {
   const qc = useQueryClient()

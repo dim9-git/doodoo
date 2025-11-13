@@ -10,7 +10,7 @@ import { UpdateCartItemPayload } from "@/entities/cart-items"
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const id = Number((await params).id)
@@ -74,7 +74,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const id = Number((await params).id)

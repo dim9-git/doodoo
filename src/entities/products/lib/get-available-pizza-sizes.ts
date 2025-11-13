@@ -2,7 +2,7 @@ import { ProductItem } from "@prisma/client"
 
 import { PizzaType, pizzaSizes } from "@/entities/products"
 
-import { PizzaParam } from "@/features/pizza-builder"
+import { PizzaParam } from "@/features/build-pizza"
 
 /**
  * Функция для получения доступных размеров пиццы по типу

@@ -4,7 +4,7 @@ import { Title, Button, cn } from "@/shared"
 
 import { ProductCover } from "@/entities/products"
 
-import { AddToCartItem } from "@/features/add-to-cart"
+import { AddToCartVariables } from "@/features/add-to-cart"
 
 interface Props {
   className?: string
@@ -13,7 +13,7 @@ interface Props {
   coverUrl: string
   price: number
   isLoading?: boolean
-  onSubmit: (payload: AddToCartItem) => void
+  onSubmit: (payload: AddToCartVariables) => void
 }
 
 export default function AddOnProductForm({
@@ -27,8 +27,10 @@ export default function AddOnProductForm({
 }: Props) {
   const onClickAdd = () => {
     onSubmit({
-      productItemId: item.id,
-      ui: {
+      payload: {
+        productItemId: item.id,
+      },
+      optItem: {
         id: item.id,
         name,
         coverImageUrl: coverUrl,

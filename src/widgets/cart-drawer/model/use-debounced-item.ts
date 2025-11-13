@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { useDebounce } from "react-use"
 
-import { UpdateVars } from "@/features/update-cart"
+import { UpdateCartVariables } from "@/features/update-cart"
 
 interface Props {
   id: number
   quantity: number
   price: number
-  updateItem: (paylod: UpdateVars) => void
+  updateItem: (paylod: UpdateCartVariables) => void
   onItemChange?: (isPending: boolean) => void
 }
 
