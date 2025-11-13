@@ -34,7 +34,7 @@ export function useRemoveFromCart() {
         const itemToDelete = old.items.find((item) => item.id === id)
         if (!itemToDelete) return old
 
-        const itemToDeleteTotal = itemToDelete.price * itemToDelete.quantity
+        const itemToDeleteTotal = itemToDelete.price
 
         return {
           items: old.items.filter((item) => item.id !== id),

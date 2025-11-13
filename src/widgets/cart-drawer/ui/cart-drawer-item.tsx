@@ -37,7 +37,7 @@ export default function CartDrawerItem({
   })
 
   const onRemove = () => {
-    removeItem(id)
+    removeItem({ id })
   }
 
   return (
