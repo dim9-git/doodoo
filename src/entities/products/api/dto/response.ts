@@ -1,10 +1,10 @@
 import { Ingredient, Product, ProductItem } from "@prisma/client"
 
-export type ProductDetailsDTO = Product & {
+export type ProductResponseDTO = Product & {
   ingredients: Ingredient[]
   items: ProductItem[]
 }
 
 export type RelatedProductsResponseDTO = {
-  data: ProductDetailsDTO[]
+  data: ProductResponseDTO[]
 }

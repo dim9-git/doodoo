@@ -11,12 +11,12 @@ import {
   cn,
 } from "@/shared"
 
-import { ProductDetailsDTO } from "@/entities/products"
+import { ProductResponseDTO } from "@/entities/products"
 
 import { ProductSwitchForm } from "@/widgets/product-switch-form"
 
 interface Props {
-  product: ProductDetailsDTO
+  product: ProductResponseDTO
   className?: string
 }
 

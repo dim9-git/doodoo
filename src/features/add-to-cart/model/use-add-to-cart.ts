@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
-import { CartStateItem, CreateCartItemPayload } from "@/entities/cart-items"
+import { CartStateItem, CreateCartItemDTO } from "@/entities/cart-items"
 
 import { addCartItem } from "../api/add-cart-item"
 
 export type AddToCartVariables = {
-  payload: CreateCartItemPayload
+  payload: CreateCartItemDTO
   optItem: CartStateItem
 }
 

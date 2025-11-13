@@ -2,7 +2,7 @@
 
 import { toast } from "sonner"
 
-import { ProductDetailsDTO, AddOnProductForm } from "@/entities/products"
+import { ProductResponseDTO, AddOnProductForm } from "@/entities/products"
 
 import { BuildPizzaForm } from "@/features/build-pizza"
 import { AddToCartVariables, useAddToCart } from "@/features/add-to-cart"
@@ -11,7 +11,7 @@ export default function ProductSwitchForm({
   product,
   _onSubmit,
 }: {
-  product: ProductDetailsDTO
+  product: ProductResponseDTO
   _onSubmit?: VoidFunction
 }) {
   const { addItemAsync, isPending: isLoading } = useAddToCart()

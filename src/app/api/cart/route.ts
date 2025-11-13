@@ -8,7 +8,7 @@ import {
   findCartItem,
   findCartByToken,
 } from "@/entities/cart"
-import { CreateCartItemPayload } from "@/entities/cart-items"
+import { CreateCartItemDTO } from "@/entities/cart-items"
 
 // import logger from "@/shared/lib/logger"
 
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       token = crypto.randomUUID()
     }
 
-    const data = (await req.json()) as CreateCartItemPayload
+    const data = (await req.json()) as CreateCartItemDTO
     const userCart = await findOrCreateCart(token)
 
     const cartItem = findCartItem(

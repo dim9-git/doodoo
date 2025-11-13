@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
-import { UpdateCartItemPayload } from "@/entities/cart-items"
+import { UpdateCartItemDTO } from "@/entities/cart-items"
 
 import { updateCartItem } from "../api/update-cart-item"
 
-export type UpdateCartVariables = UpdateCartItemPayload
+export type UpdateCartVariables = UpdateCartItemDTO
 
 export const useUpdateCart = () => {
   const qc = useQueryClient()

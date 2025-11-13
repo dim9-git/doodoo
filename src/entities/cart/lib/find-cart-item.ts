@@ -1,11 +1,12 @@
-import { CartItemDTO } from "@/entities/cart-items/api/dto/cart-item.dto"
-import { CartDTO } from "../api/dto/cart.dto"
+import { CartItemResponseDTO } from "@/entities/cart-items"
+
+import { CartResponseDTO } from "../api/dto/response"
 
 export const findCartItem = (
-  cart: CartDTO,
+  cart: CartResponseDTO,
   productItemId: number,
   ingredientsIds?: number[]
-): CartItemDTO | undefined => {
+): CartItemResponseDTO | undefined => {
   const reqIngredientIds = (ingredientsIds || []).sort()
 
   return cart.items.find((item) => {

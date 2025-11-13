@@ -6,7 +6,7 @@ import {
   updateCartTotalByToken,
   withItems,
 } from "@/entities/cart"
-import { UpdateCartItemPayload } from "@/entities/cart-items"
+import { UpdateCartItemDTO } from "@/entities/cart-items"
 
 export async function PATCH(
   req: NextRequest,
@@ -14,7 +14,7 @@ export async function PATCH(
 ) {
   try {
     const id = Number((await params).id)
-    const body = (await req.json()) as UpdateCartItemPayload
+    const body = (await req.json()) as UpdateCartItemDTO
     const token = req.cookies.get("cartToken")?.value
 
     if (!token) {

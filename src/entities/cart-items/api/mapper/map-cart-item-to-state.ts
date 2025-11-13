@@ -1,5 +1,5 @@
 import { calcCartItemTotalPrice } from "../../lib/calc-cart-item-total-price"
-import { CartItemDTO } from "../dto/cart-item.dto"
+import { CartItemResponseDTO } from "../dto/response"
 
 export type CartStateItem = {
   id: number
@@ -16,7 +16,9 @@ export type CartStateItem = {
   }[]
 }
 
-export const mapCartItemToStateItem = (item: CartItemDTO): CartStateItem => ({
+export const mapCartItemToStateItem = (
+  item: CartItemResponseDTO
+): CartStateItem => ({
   id: item.id,
   quantity: item.quantity,
   name: item.productItem.product.name,

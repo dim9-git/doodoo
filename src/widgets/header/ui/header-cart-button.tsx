@@ -4,14 +4,14 @@ import { ArrowRight, ShoppingCart } from "lucide-react"
 
 import { Button } from "@/shared"
 
-import { CartDTO, useCart } from "@/entities/cart"
+import { CartResponseDTO, useCart } from "@/entities/cart"
 
 import { CartDrawer } from "@/widgets/cart-drawer"
 
 interface Props {
   total?: number
   itemsCount?: number
-  initialData: CartDTO | null
+  initialData: CartResponseDTO | null
 }
 
 export default function HeaderCartButton({ initialData }: Props) {

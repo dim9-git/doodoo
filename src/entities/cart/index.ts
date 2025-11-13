@@ -1,4 +1,4 @@
-export * from "./api/dto/cart.dto"
+export * from "./api/dto/response"
 export { mapCartToState, type CartState } from "./api/mapper/map-cart-to-state"
 export * from "./api/find-or-create"
 export {

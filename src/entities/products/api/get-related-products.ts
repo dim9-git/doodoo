@@ -1,12 +1,12 @@
 import { prisma } from "db/prisma"
-import { ProductDetailsDTO } from "./dto/product.dto"
+import { ProductResponseDTO } from "./dto/response"
 
 const DEFAULT_TAKE = 6
 
 export const getRelatedProducts = async (
   id: number,
   take?: number
-): Promise<ProductDetailsDTO[]> => {
+): Promise<ProductResponseDTO[]> => {
   const category = await prisma.category.findFirst({
     where: {
       products: {

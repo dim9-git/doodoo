@@ -1,7 +1,7 @@
 import { http } from "@/shared/lib/http"
 
-import { CartDTO } from "./dto/cart.dto"
+import { CartResponseDTO } from "./dto/response"
 
 export const getCart = async () => {
-  return (await http.get<{ data: CartDTO }>("/api/cart")).data
+  return (await http.get<{ data: CartResponseDTO }>("/api/cart")).data
 }

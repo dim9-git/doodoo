@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
-import { CartDTO, getCart, mapCartToState } from "@/entities/cart"
+import { CartResponseDTO, getCart, mapCartToState } from "@/entities/cart"
 
 export const CART_KEY = ["cart"] as const
 
-export function useCart(opts?: { initialData?: CartDTO | null }) {
+export function useCart(opts?: { initialData?: CartResponseDTO | null }) {
   const {
     data: cart,
     isError,

@@ -3,11 +3,11 @@ import { prisma, TransactionClient } from "db/prisma"
 import { calcCartItemTotalPrice } from "@/entities/cart-items"
 
 import { withItems } from "../model/cart.relations"
-import { CartDTO } from "./dto/cart.dto"
+import { CartResponseDTO } from "./dto/response"
 import { findCartByToken } from "./find-by-token"
 
 export async function updateCartTotal(
-  userCart: CartDTO,
+  userCart: CartResponseDTO,
   client?: TransactionClient
 ) {
   const db = client || prisma

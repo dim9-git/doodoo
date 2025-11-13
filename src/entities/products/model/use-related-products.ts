@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 
 import { http } from "@/shared/lib/http"
 
-import { RelatedProductsResponseDTO } from "../api/dto/product.dto"
+import { RelatedProductsResponseDTO } from "../api/dto/response"
 
 export const useRelatedProducts = (id: number) => {
   const { isLoading, isError, isSuccess, data } =

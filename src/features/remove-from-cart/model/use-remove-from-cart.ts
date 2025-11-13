@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
-import { RemoveCartItemPayload } from "@/entities/cart-items"
+import { RemoveCartItemDTO } from "@/entities/cart-items"
 
 import { removeCartItem } from "../api/remove-cart-item"
 
-type RemoveFromCartVariables = RemoveCartItemPayload
+type RemoveFromCartVariables = RemoveCartItemDTO
 
 export function useRemoveFromCart() {
   const qc = useQueryClient()

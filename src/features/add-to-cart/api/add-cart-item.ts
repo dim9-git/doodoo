@@ -1,12 +1,12 @@
 import { http } from "@/shared/lib/http"
 
-import { CartDTO } from "@/entities/cart"
-import { CreateCartItemPayload } from "@/entities/cart-items"
+import { CartResponseDTO } from "@/entities/cart"
+import { CreateCartItemDTO } from "@/entities/cart-items"
 
-export const addCartItem = async (payload: CreateCartItemPayload) => {
+export const addCartItem = async (payload: CreateCartItemDTO) => {
   return (
     await http.post<{
-      data: CartDTO
+      data: CartResponseDTO
     }>("/api/cart", payload)
   ).data
 }

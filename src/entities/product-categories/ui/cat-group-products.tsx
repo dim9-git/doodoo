@@ -6,7 +6,7 @@ import { useIntersection } from "react-use"
 import { Title, cn } from "@/shared"
 
 import { useCategoryStore } from "@/entities/product-categories"
-import { ProductCard, ProductDetailsDTO } from "@/entities/products"
+import { ProductCard, ProductResponseDTO } from "@/entities/products"
 
 type Props = {
   classNames?: {
@@ -15,7 +15,7 @@ type Props = {
   }
   title: string
   categoryId: number
-  products: ProductDetailsDTO[]
+  products: ProductResponseDTO[]
 }
 
 export default function CatGroupProducts({

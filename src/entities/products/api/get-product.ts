@@ -1,6 +1,6 @@
 import { prisma } from "db/prisma"
 
-import { ProductDetailsDTO } from "./dto/product.dto"
+import { ProductResponseDTO } from "./dto/response"
 
 export const getProduct = async (id: number) => {
   const product = await prisma.product.findUnique({
@@ -12,7 +12,7 @@ export const getProduct = async (id: number) => {
 
 export const getProductDetails = async (
   id: number
-): Promise<ProductDetailsDTO | null> => {
+): Promise<ProductResponseDTO | null> => {
   const product = await prisma.product.findUnique({
     where: { id },
     include: {

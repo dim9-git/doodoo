@@ -1,5 +1,6 @@
 export * from "./api/mapper/map-cart-item-to-state"
-export * from "./api/dto/cart-item.dto"
+export * from "./api/dto/response"
+export * from "./api/dto/request"
 
 export * from "./lib/calc-cart-item-total-price"
 export { getCartItemInfoText } from "./lib/get-cart-item-info-text"

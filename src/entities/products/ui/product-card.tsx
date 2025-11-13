@@ -5,11 +5,11 @@ import { Plus } from "lucide-react"
 
 import { Button, Title, cn } from "@/shared"
 
-import { ProductDetailsDTO } from "../api/dto/product.dto"
+import { ProductResponseDTO } from "../api/dto/response"
 
 interface Props {
   className?: string
-  product: ProductDetailsDTO & {
+  product: ProductResponseDTO & {
     price: number
   }
 }
