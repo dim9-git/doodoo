@@ -1,14 +1,15 @@
-import Container from "@/shared/ui/container"
-import { cn } from "@/shared/lib/utils"
+import { Container, cn } from "@/shared"
 
 import { Categories } from "./categories"
 import SortPopup from "./sort-popup"
+import { getCategoriesShort } from "@/entities/product-categories"
 
 interface Props {
   className?: string
 }
 
-export default function TopNavbar({ className }: Props) {
+export default async function TopNavbar({ className }: Props) {
+  const categories = await getCategoriesShort()
   return (
     <div
       className={cn(
@@ -17,7 +18,7 @@ export default function TopNavbar({ className }: Props) {
       )}
     >
       <Container className="flex items-center justify-between ">
-        <Categories />
+        <Categories categories={categories} />
         <SortPopup />
       </Container>
     </div>

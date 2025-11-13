@@ -2,58 +2,26 @@
 
 import Link from "next/link"
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
 
 import { useCategoryStore } from "@/entities/product-categories"
 
 interface Props {
   className?: string
+  categories: {
+    id: number
+    name: string
+  }[]
 }
 
-const cats = [
-  {
-    name: "Пиццы",
-    id: 0,
-  },
-  {
-    name: "Комбо",
-    id: 1,
-  },
-  {
-    name: "Закуски",
-    id: 2,
-  },
-  {
-    name: "Десерты",
-    id: 3,
-  },
-  {
-    name: "Коктейли",
-    id: 4,
-  },
-  {
-    name: "Кофе",
-    id: 5,
-  },
-  {
-    name: "Напитки",
-    id: 6,
-  },
-  {
-    name: "Десерты",
-    id: 7,
-  },
-]
-
-export function Categories({ className }: Props) {
+export function Categories({ className, categories }: Props) {
   const activeId = useCategoryStore((state) => state.activeId)
-  const items = cats
 
   return (
     <div
       className={cn("inline-flex gap-1 bg-gray-50 p-1 rounded-2xl", className)}
     >
-      {items.map(({ name, id }, index) => (
+      {categories.map(({ name, id }, index) => (
         <Link
           key={index}
           className={cn(

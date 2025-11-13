@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
 
 import {
   Dialog,
@@ -9,15 +8,12 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-} from "@/shared/ui/sh"
-import { cn } from "@/shared/lib/utils"
+  cn,
+} from "@/shared"
 
 import { ProductDetailsDTO } from "@/entities/products"
 
-import { AddToCartItem, useAddToCart } from "@/features/add-to-cart"
-import { PizzaBuilderForm } from "@/features/pizza-builder"
-
-import ChooseSimpleProductForm from "../ui/choose-simple-product-form"
+import { ProductSwitchForm } from "@/widgets/product-switch-form"
 
 interface Props {
   product: ProductDetailsDTO
@@ -26,25 +22,6 @@ interface Props {
 
 export default function ChooseProductModal({ product, className }: Props) {
   const router = useRouter()
-  const { addItemAsync, isPending: isLoading } = useAddToCart()
-
-  const firstItem = product.items[0]
-  const isPizza = Boolean(firstItem.type)
-
-  const onSubmit = async (payload: AddToCartItem) => {
-    await addItemAsync(payload, {
-      onSuccess: () => {
-        toast.success("Товар добавлен в корзину", {
-          
-        })
-      },
-      onError: () => {
-        toast.error("Ошибка при добавлении товара")
-      },
-    })
-
-    router.back()
-  }
 
   return (
     <Dialog open={true} onOpenChange={() => router.back()}>
@@ -59,25 +36,7 @@ export default function ChooseProductModal({ product, className }: Props) {
           <DialogDescription>Выберите продукт</DialogDescription>
         </DialogHeader>
 
-        {isPizza ? (
-          <PizzaBuilderForm
-            name={product.name}
-            coverUrl={product.coverUrl ?? ""}
-            items={product.items}
-            ingredients={product.ingredients}
-            onSubmit={onSubmit}
-            isLoading={isLoading}
-          />
-        ) : (
-          <ChooseSimpleProductForm
-            item={firstItem}
-            name={product.name}
-            coverUrl={product.coverUrl ?? ""}
-            price={firstItem.price}
-            onSubmit={onSubmit}
-            isLoading={isLoading}
-          />
-        )}
+        <ProductSwitchForm product={product} _onSubmit={() => router.back()} />
       </DialogContent>
     </Dialog>
   )

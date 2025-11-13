@@ -1,8 +1,6 @@
 import { ProductItem } from "@prisma/client"
 
-import { cn } from "@/shared/lib/utils"
-import { Title } from "@/shared/ui/title"
-import { Button } from "@/shared/ui/sh"
+import { Title, Button, cn } from "@/shared"
 
 import { ProductCover } from "@/entities/products"
 
@@ -18,7 +16,7 @@ interface Props {
   onSubmit: (payload: AddToCartItem) => void
 }
 
-export default function ChooseSimpleProductForm({
+export default function AddOnProductForm({
   className,
   item,
   name,

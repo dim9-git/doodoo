@@ -3,8 +3,7 @@
 import * as React from "react"
 import { useIntersection } from "react-use"
 
-import { cn } from "@/shared/lib/utils"
-import { Title } from "@/shared/ui/title"
+import { Title, cn } from "@/shared"
 
 import { useCategoryStore } from "@/entities/product-categories"
 import { ProductCard, ProductDetailsDTO } from "@/entities/products"
@@ -37,9 +36,11 @@ export default function CatGroupProducts({
 
   React.useEffect(() => {
     if (intersection && intersection.isIntersecting) {
+      console.log("categoryId", categoryId, title)
+
       setCategoryId(categoryId)
     }
-  }, [intersection, categoryId, setCategoryId])
+  }, [intersection, categoryId, setCategoryId, title])
 
   return (
     <div className={classNames?.container} id={title} ref={intersectionRef}>

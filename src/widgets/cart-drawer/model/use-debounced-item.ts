@@ -1,0 +1,63 @@
+import { useEffect, useState } from "react"
+import { useDebounce } from "react-use"
+
+import { UpdateVars } from "@/features/update-cart"
+
+interface Props {
+  id: number
+  quantity: number
+  price: number
+  updateItem: (paylod: UpdateVars) => void
+  onItemChange?: (isPending: boolean) => void
+}
+
+export const useDebouncedItem = ({
+  id,
+  quantity,
+  price,
+  updateItem,
+  onItemChange,
+}: Props) => {
+  const [count, setCount] = useState(quantity)
+  const [total, setTotal] = useState(price)
+
+  useEffect(() => {
+    setCount(quantity)
+  }, [quantity])
+
+  useEffect(() => {
+    setTotal(price)
+  }, [price])
+
+  useEffect(() => {
+    if (count !== quantity) {
+      onItemChange?.(true)
+    }
+  }, [count, quantity, onItemChange])
+
+  useDebounce(
+    async () => {
+      if (count !== quantity) {
+        await updateItem({ id, quantity: count })
+        onItemChange?.(false)
+      }
+    },
+    325,
+    [id, count, quantity, onItemChange]
+  )
+
+  const onUpdate = (type: "plus" | "minus") => {
+    const unitPrice = total / count
+    const newCount = type === "minus" ? Math.max(1, count - 1) : count + 1
+    const newTotal = unitPrice * newCount
+
+    setCount(newCount)
+    setTotal(newTotal)
+  }
+
+  return {
+    count,
+    total,
+    onUpdate,
+  }
+}

@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
+import { UpdateCartItemPayload } from "@/entities/cart-items"
 
 import { updateCartItem } from "../api/update-cart-item"
-// import logger from "@/shared/lib/logger"
 
-type Vars = { id: number; quantity: number }
+type UpdateCartVariables = UpdateCartItemPayload
 
 export const useUpdateCart = () => {
   const qc = useQueryClient()
@@ -17,8 +17,8 @@ export const useUpdateCart = () => {
     isSuccess,
     isError,
   } = useMutation({
-    mutationFn: async ({ id, quantity }: Vars) => {
-      return mapCartToState(await updateCartItem(id, quantity))
+    mutationFn: async ({ id, quantity }: UpdateCartVariables) => {
+      return mapCartToState(await updateCartItem({ id, quantity }))
     },
     onMutate: async ({ id, quantity }) => {
       await qc.cancelQueries({ queryKey: CART_KEY })
@@ -30,9 +30,6 @@ export const useUpdateCart = () => {
 
         const itemToUpdate = old.items.find((item) => item.id === id)
         if (!itemToUpdate) return old
-
-        // logger.info("params:", { id, quantity })
-        // logger.info("ITEM TO UPDATE:", itemToUpdate)
 
         const unitPrice =
           itemToUpdate.quantity > 0
@@ -50,11 +47,34 @@ export const useUpdateCart = () => {
 
       return { prev, updatedId: id }
     },
-    onError: (_err, _vars, ctx) => {
-      if (ctx?.prev) qc.setQueryData(CART_KEY, ctx.prev)
+    onError: (_error, _variables, context) => {
+      if (context?.prev) qc.setQueryData(CART_KEY, context.prev)
     },
-    onSettled: () => {
-      qc.invalidateQueries({ queryKey: CART_KEY })
+    onSuccess: (data, _variables, context) => {
+      if (!context?.updatedId) {
+        qc.setQueryData(CART_KEY, data)
+        return
+      }
+
+      qc.setQueryData<CartState>(CART_KEY, (current) => {
+        if (!current) return data
+
+        const { updatedId } = context
+
+        const updatedItem = data.items.find((item) => item.id === updatedId)
+        if (!updatedItem) return data
+
+        const existingItem = current.items.find((item) => item.id === updatedId)
+        const items = current.items.map((item) =>
+          item.id === updatedId ? updatedItem : item
+        )
+
+        const total = existingItem
+          ? current.total - existingItem.price + updatedItem.price
+          : current.total
+
+        return { items, total }
+      })
     },
   })
 

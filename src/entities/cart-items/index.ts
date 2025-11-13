@@ -1,7 +1,4 @@
-export {
-  mapCartItemToStateItem,
-  type CartStateItem,
-} from "./api/mapper/map-cart-item-to-state"
+export * from "./api/mapper/map-cart-item-to-state"
 export * from "./api/dto/cart-item.dto"
 
 export * from "./lib/calc-cart-item-total-price"

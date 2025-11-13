@@ -23,7 +23,7 @@ interface ReturnProps {
   currentItem: ProductItem | undefined
 }
 
-export function usePizzaConfiguration(items: ProductItem[]): ReturnProps {
+export function usePizzaBuilder(items: ProductItem[]): ReturnProps {
   const [type, setType] = useState<PizzaType>(1)
 
   const availableSizes = getAvailablePizzaSizes(items, type)

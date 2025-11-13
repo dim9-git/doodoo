@@ -7,12 +7,17 @@ export type CartItemDTO = CartItem & {
   ingredients: Ingredient[]
 }
 
-export interface CreateCartItemRequestDTO {
+export type CreateCartItemPayload = {
   productItemId: number
   ingredientsIds?: number[]
   quantity?: number
 }
 
-export interface UpdateCartItemRequestDTO {
+export interface UpdateCartItemPayload {
+  id: number
   quantity: number
+}
+
+export interface RemoveCartItemPayload {
+  id: number
 }

@@ -18,9 +18,9 @@ export function useQueryFilters(filters: IFilters) {
           {
             sizes: Array.from(filters.sizes),
             types: Array.from(filters.types),
-            ingridients: Array.from(filters.ingridients),
-            fromPrice: filters.fromPrice,
-            toPrice: filters.toPrice,
+            ingredients: Array.from(filters.ingredients),
+            fromPrice: filters.prices.fromPrice,
+            toPrice: filters.prices.toPrice,
           },
           {
             arrayFormat: "comma",

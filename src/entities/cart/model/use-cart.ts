@@ -8,6 +8,7 @@ export function useCart(opts?: { initialData?: CartDTO | null }) {
     data: cart,
     isError,
     isLoading,
+    isSuccess,
   } = useQuery({
     queryKey: CART_KEY,
     queryFn: async () => {
@@ -22,5 +23,6 @@ export function useCart(opts?: { initialData?: CartDTO | null }) {
     cart,
     isLoading,
     isError,
+    isSuccess,
   }
 }

@@ -1,4 +1,4 @@
-import { Toaster } from "@/shared/ui/sh"
+import { Toaster } from "@/shared"
 
 import Header from "@/widgets/header"
 

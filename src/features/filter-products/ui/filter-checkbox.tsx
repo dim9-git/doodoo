@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Checkbox } from "@/shared/ui/sh"
+import { Checkbox } from "@/shared"
 
 export interface FilterCheckboxProps {
   label: string

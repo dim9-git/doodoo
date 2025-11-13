@@ -5,8 +5,7 @@ import Link from "next/link"
 import { Search } from "lucide-react"
 import { useDebounce } from "react-use"
 
-import { Input } from "@/shared/ui/sh"
-import { cn } from "@/shared/lib/utils"
+import { Input, cn } from "@/shared"
 
 import { useSearchQuery } from "@/features/search-products"
 
@@ -26,8 +25,6 @@ export default function SearchInput({ className }: Props) {
     250,
     [query]
   )
-
-  console.log(debouncedQuery)
 
   const { products } = useSearchQuery({
     query: debouncedQuery,

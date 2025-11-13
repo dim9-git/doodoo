@@ -7,7 +7,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export default function Container({ className, children }: Props) {
+export function Container({ className, children }: Props) {
   return (
     <div className={cn("mx-auto w-full max-w-[1280px] max-xl:px-4", className)}>
       {children}

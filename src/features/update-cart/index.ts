@@ -1,2 +1,2 @@
 export * from "./api/update-cart-item"
-export { useUpdateCart } from "./model/use-update-cart"
+export { useUpdateCart, type UpdateVars } from "./model/use-update-cart"

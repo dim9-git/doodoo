@@ -1,4 +1,4 @@
-const logger = {
+export const logger = {
   info: (message: string, meta?: object) => {
     console.log(
       JSON.stringify(
@@ -35,5 +35,3 @@ const logger = {
     )
   },
 }
-
-export default logger

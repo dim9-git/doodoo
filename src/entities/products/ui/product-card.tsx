@@ -3,9 +3,7 @@ import Link from "next/link"
 
 import { Plus } from "lucide-react"
 
-import { cn } from "@/shared/lib/utils"
-import { Title } from "@/shared/ui/title"
-import { Button } from "@/shared/ui/sh/button"
+import { Button, Title, cn } from "@/shared"
 
 import { ProductDetailsDTO } from "../api/dto/product.dto"
 
@@ -37,6 +35,10 @@ export default function ProductCard({ className, product }: Props) {
 
       <div className="mt-1">
         <Title text={product.name} className="font-bold" size="sm" />
+
+        <p className="text-sm text-gray-400">
+          {product.ingredients.map((ingredient) => ingredient.name).join(", ")}
+        </p>
 
         <p className="mt-3 text-sm text-gray-500">{product.description}</p>
 

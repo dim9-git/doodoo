@@ -2,7 +2,7 @@
 
 import { ArrowRight, ShoppingCart } from "lucide-react"
 
-import { Button } from "@/shared/ui/sh"
+import { Button } from "@/shared"
 
 import { CartDTO, useCart } from "@/entities/cart"
 

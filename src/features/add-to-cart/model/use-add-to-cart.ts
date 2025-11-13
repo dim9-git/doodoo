@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
-import { CartStateItem, CreateCartItemRequestDTO } from "@/entities/cart-items"
+import { CartStateItem, CreateCartItemPayload } from "@/entities/cart-items"
 
 import { addCartItem } from "../api/add-cart-item"
 
-export type AddToCartItem = CreateCartItemRequestDTO & {
-  ui: CartStateItem
+export type AddToCartVariables = {
+  payload: CreateCartItemPayload
+  optItem: CartStateItem
 }
 
 export function useAddToCart() {
@@ -19,12 +20,12 @@ export function useAddToCart() {
     isError,
     isSuccess,
   } = useMutation({
-    mutationFn: async (newItem: AddToCartItem) => {
-      console.log("[MUTATE ADD] payload:", newItem)
-      const dto = await addCartItem(newItem)
-      return mapCartToState(dto)
+    mutationFn: async ({ payload }: AddToCartVariables) => {
+      console.log("[MUTATE ADD] payload:", payload)
+      const responseDTO = await addCartItem(payload)
+      return mapCartToState(responseDTO)
     },
-    onMutate: async (newItem) => {
+    onMutate: async ({ optItem }) => {
       //  Optimistic updates here
       await qc.cancelQueries({ queryKey: CART_KEY })
 
@@ -34,31 +35,36 @@ export function useAddToCart() {
         if (!old) return old
 
         // item.price is totalPrice
-        const newItemTotal = newItem.ui.price * newItem.ui.quantity
+        const newItemTotal = optItem.price * optItem.quantity
 
         return {
-          items: [
-            {
-              ...newItem.ui,
-              quantity: newItem.ui.quantity,
-            },
-            ...old.items,
-          ],
+          items: [optItem, ...old.items],
           total: old.total + newItemTotal,
         }
       })
 
-      return { prev }
+      return { prev, optItem }
     },
-    onError: (_err, _newItem, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.prev) qc.setQueryData<CartState>(CART_KEY, context.prev)
     },
-    onSuccess: (mappedCart) => {
+    onSuccess: (data, _variables, context) => {
       // replace optimistic with server truth
-      qc.setQueryData<CartState>(CART_KEY, mappedCart)
-    },
-    onSettled: () => {
-      qc.invalidateQueries({ queryKey: CART_KEY })
+      if (!context?.optItem) {
+        qc.setQueryData<CartState>(CART_KEY, data)
+        return
+      }
+
+      qc.setQueryData<CartState>(CART_KEY, (current) => {
+        if (!current) return data
+
+        const { optItem } = context
+
+        const newItem = data.items.find((item) => item.id === optItem.id)
+        if (!newItem) return data
+
+        return current
+      })
     },
   })
 

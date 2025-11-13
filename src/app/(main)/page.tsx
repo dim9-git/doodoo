@@ -1,18 +1,26 @@
-import Container from "@/shared/ui/container"
-import { Title } from "@/shared/ui/title"
+import { Suspense } from "react"
 
-import { getCategories, CatGroupProducts } from "@/entities/product-categories"
+import { Title, Container } from "@/shared"
 
-import { Filters } from "@/features/filter-products"
+import { CatGroupProducts } from "@/entities/product-categories"
 
-import TopNavbar from "@/widgets/top-navbar.tsx/ui/top-navbar"
+import {
+  Filters,
+  findFilteredProducts,
+  GetSearchParams,
+} from "@/features/filter-products"
 
-export default async function Home() {
-  const categories = await getCategories()
+import { TopNavbar } from "@/widgets/top-navbar"
 
-  const notEmptyCategories = categories.filter(
-    (category) => category.products.length > 0
-  )
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<GetSearchParams>
+}) {
+  const params = await searchParams
+  const categories = await findFilteredProducts(params)
+
+  const nonEmptyCategories = categories.filter((cat) => cat.products.length > 0)
 
   return (
     <div>
@@ -27,12 +35,14 @@ export default async function Home() {
           {/* Filters */}
           <div className="xl:max-w-[250px] w-full">
             <Title text="Фильтры" size="sm" className="font-bold" />
-            <Filters className="max-xl:flex max-xl:justify-between" />
+            <Suspense>
+              <Filters className="max-xl:flex max-xl:justify-between" />
+            </Suspense>
           </div>
 
           {/* Products */}
           <div className="flex-1 space-y-16">
-            {notEmptyCategories.map((category) => (
+            {nonEmptyCategories.map((category) => (
               <CatGroupProducts
                 key={category.id}
                 title={category.name}

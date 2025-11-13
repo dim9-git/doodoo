@@ -1,14 +1,13 @@
-import { User } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { cookies } from "next/headers"
+import { User } from "lucide-react"
 
-import SearchInput from "@/features/search-products/ui/search-input"
-import Container from "@/shared/ui/container"
-import { Button } from "@/shared/ui/sh"
-import { cn } from "@/shared/lib/utils"
+import { Button, Container, cn } from "@/shared"
 
 import { findCartByToken } from "@/entities/cart"
+
+import SearchInput from "@/features/search-products/ui/search-input"
 
 import HeaderCartButton from "./header-cart-button"
 

@@ -3,9 +3,7 @@
 import { ChangeEvent, useState } from "react"
 import { useDebounce } from "react-use"
 
-import { cn } from "@/shared/lib/utils"
-import { Button, Input } from "@/shared/ui/sh"
-import { Skeleton } from "@/shared/ui/sh/skeleton"
+import { Button, Input, Skeleton, cn } from "@/shared"
 
 import { FilterCheckbox, FilterCheckboxProps } from "./filter-checkbox"
 

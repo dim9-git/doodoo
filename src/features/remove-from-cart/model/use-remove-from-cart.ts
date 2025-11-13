@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY, CartState, mapCartToState } from "@/entities/cart"
+import { RemoveCartItemPayload } from "@/entities/cart-items"
 
 import { removeCartItem } from "../api/remove-cart-item"
+
+type RemoveFromCartVariables = RemoveCartItemPayload
 
 export function useRemoveFromCart() {
   const qc = useQueryClient()
@@ -14,10 +17,10 @@ export function useRemoveFromCart() {
     isError,
     isSuccess,
   } = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async ({ id }: RemoveFromCartVariables) => {
       return mapCartToState(await removeCartItem(id))
     },
-    onMutate: async (id) => {
+    onMutate: async ({ id }) => {
       // Cancel any outgoing refetches
       await qc.cancelQueries({ queryKey: CART_KEY })
 
@@ -41,20 +44,30 @@ export function useRemoveFromCart() {
 
       return { prev, removedId: id }
     },
-    onError: (_err, _id, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.prev) qc.setQueryData<CartState>(CART_KEY, context.prev)
     },
-    onSuccess: (mappedCart, _id, context) => {
-      const current = qc.getQueryData<CartState>(CART_KEY)
-      if (current && context?.removedId) {
-        const itemStillExists = current.items.some(
-          (item) => item.id === context.removedId
-        )
-        if (!itemStillExists) {
-          // replace optimistic with server truth
-          qc.setQueryData<CartState>(CART_KEY, mappedCart)
-        }
+    onSuccess: (data, _variables, context) => {
+      if (!context?.removedId) {
+        qc.setQueryData(CART_KEY, data)
+        return
       }
+
+      qc.setQueryData<CartState>(CART_KEY, (current) => {
+        if (!current) return data
+
+        const { removedId } = context
+
+        const itemToRemoveFound = current.items.some(
+          (item) => item.id === removedId
+        )
+
+        if (!itemToRemoveFound) {
+          return data
+        }
+
+        return current
+      })
     },
   })
 

@@ -1,13 +1,11 @@
 "use client"
 
-import { RangeSlider } from "@/shared/ui/sh"
-import { Input } from "@/shared/ui/sh"
-import { cn } from "@/shared/lib/utils"
+import { Input, RangeSlider, cn } from "@/shared"
 
 import { useIngridients } from "@/entities/ingredients"
 
 import FilterCheckboxGroup from "./filter-checkbox-group"
-import { useFilters } from "../model/use-filters"
+import { PriceRangeKey, useFilters } from "../model/use-filters"
 import { useQueryFilters } from "../model/use-query-filters"
 
 interface Props {
@@ -26,6 +24,13 @@ export default function Filters({ className }: Props) {
       label: ingr.name,
       value: ingr.id.toString(),
     })) ?? []
+
+  const setPrice = (attr: keyof typeof PriceRangeKey, val: string) => {
+    filters.setPrices((prevPrices) => ({
+      ...prevPrices,
+      [attr]: Number(val),
+    }))
+  }
 
   return (
     <div className={cn(className)}>
@@ -47,8 +52,8 @@ export default function Filters({ className }: Props) {
           groupName="types"
           title="Тип теста"
           items={[
-            { label: "Тонкое", value: "thin" },
-            { label: "Традиционное", value: "traditional" },
+            { label: "Традиционное", value: "1" },
+            { label: "Тонкое", value: "2" },
           ]}
           onCheckedChange={filters.onToggleType}
           selectedValues={filters.types}
@@ -66,12 +71,7 @@ export default function Filters({ className }: Props) {
             min={0}
             max={1000}
             defaultValue={filters.prices.fromPrice?.toString() ?? ""}
-            onChange={(e) =>
-              filters.setPrices({
-                ...filters.prices,
-                fromPrice: Number(e.target.value),
-              })
-            }
+            onChange={(e) => setPrice("fromPrice", e.target.value)}
           />
           <Input
             placeholder="1000"
@@ -80,12 +80,7 @@ export default function Filters({ className }: Props) {
             min={0}
             max={1000}
             defaultValue={filters.prices.toPrice?.toString() ?? ""}
-            onChange={(e) =>
-              filters.setPrices({
-                ...filters.prices,
-                toPrice: Number(e.target.value),
-              })
-            }
+            onChange={(e) => setPrice("toPrice", e.target.value)}
           />
         </div>
 
@@ -113,8 +108,8 @@ export default function Filters({ className }: Props) {
           limit={6}
           items={ingridientItems}
           isLoading={isLoading}
-          onCheckedChange={filters.onToggleIngridient}
-          selectedValues={filters.ingridients}
+          onCheckedChange={filters.onToggleIngredient}
+          selectedValues={filters.ingredients}
         />
       </div>
     </div>

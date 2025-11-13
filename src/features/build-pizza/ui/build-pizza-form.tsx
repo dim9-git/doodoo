@@ -1,8 +1,8 @@
+"use client"
+
 import { Ingredient, ProductItem } from "@prisma/client"
 
-import { cn } from "@/shared/lib/utils"
-import { Title } from "@/shared/ui/title"
-import { Button } from "@/shared/ui/sh"
+import { Button, Title, cn } from "@/shared"
 
 import { IngredientItem } from "@/entities/ingredients"
 import {
@@ -13,9 +13,9 @@ import {
   getPizzaTextAndPrice,
 } from "@/entities/products"
 
-import { AddToCartItem } from "@/features/add-to-cart"
+import { AddToCartVariables } from "@/features/add-to-cart"
 
-import { usePizzaConfiguration } from "../model/use-pizza-configuration"
+import { usePizzaBuilder } from "../model/use-pizza-builder"
 import GroupPizzaOptions from "./group-pizza-params"
 
 interface Props {
@@ -25,10 +25,10 @@ interface Props {
   ingredients: Ingredient[]
   items: ProductItem[]
   isLoading?: boolean
-  onSubmit: (payload: AddToCartItem) => void
+  onSubmit: (payload: AddToCartVariables) => void
 }
 
-export default function PizzaBuidlerForm({
+export default function BuildPizzaForm({
   className,
   name,
   coverUrl,
@@ -46,7 +46,7 @@ export default function PizzaBuidlerForm({
     toggleIngredient,
     availableSizes,
     currentItem,
-  } = usePizzaConfiguration(items)
+  } = usePizzaBuilder(items)
 
   const { price, text } = getPizzaTextAndPrice(
     items,
@@ -59,27 +59,23 @@ export default function PizzaBuidlerForm({
   const productItemId = currentItem ? currentItem.id : -1
 
   const onClickAdd = () => {
-    console.log("Adding to cart:", {
-      productItemId,
-      size,
-      type,
-      selectedIngredients,
-    })
     onSubmit({
-      productItemId,
-      ui: {
-        id: productItemId,
+      payload: {
+        productItemId,
+        ingredientsIds: Array.from(selectedIngredients),
+      },
+      optItem: {
+        id: Number(`${productItemId}-${Date.now()}`),
+        name,
+        price,
         quantity: 1,
         pizzaSize: size,
         pizzaType: type,
         ingredients: ingredients.filter((ingr) =>
           selectedIngredients.has(ingr.id)
         ),
-        name,
-        price,
         coverImageUrl: coverUrl,
       },
-      ingredientsIds: Array.from(selectedIngredients),
     })
   }
 

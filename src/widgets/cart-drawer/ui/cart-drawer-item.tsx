@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react"
 import { Trash2Icon } from "lucide-react"
-import { useDebounce } from "react-use"
 
 import { cn } from "@/shared/lib/utils"
 
 import { CartItem, CartItemProps } from "@/entities/cart-items"
 
-import { useRemoveFromCart } from "@/features/remove-from-cart"
 import { useUpdateCart } from "@/features/update-cart"
+import { useRemoveFromCart } from "@/features/remove-from-cart"
+
+import { useDebouncedItem } from "../model/use-debounced-item"
 
 interface Props extends CartItemProps {
   className?: string
+  onItemChange?: (isPending: boolean) => void
 }
 
 export default function CartDrawerItem({
@@ -18,41 +19,34 @@ export default function CartDrawerItem({
   id,
   imageUrl,
   name,
-  price,
-  quantity,
+  price, // total price from the server
+  quantity, // quantity from the server
   details,
   disabled,
+  onItemChange,
 }: Props) {
+  const { updateItemAsync, isPending } = useUpdateCart()
   const { removeItem } = useRemoveFromCart()
-  const { updateItem } = useUpdateCart()
 
-  const [localQty, setLocalQty] = useState(quantity)
-
-  useEffect(() => {
-    setLocalQty(quantity)
-  }, [quantity])
-
-  useDebounce(
-    () => {
-      if (localQty !== quantity) {
-        updateItem({ id, quantity: localQty })
-      }
-    },
-    350,
-    [localQty]
-  )
+  const { count, total, onUpdate } = useDebouncedItem({
+    id,
+    price,
+    quantity,
+    updateItem: updateItemAsync,
+    onItemChange,
+  })
 
   const onRemove = () => {
     removeItem(id)
   }
 
-  const onChange = (type: "plus" | "minus") => {
-    setLocalQty((prev) => (type === "minus" ? Math.max(1, prev - 1) : prev + 1))
-  }
-
   return (
     <div
-      className={cn("flex bg-white gap-6 p-4", className)}
+      className={cn(
+        "flex bg-white gap-6 p-4",
+        className,
+        isPending && "pointer-events-none opacity-50"
+      )}
       id={id.toString()}
     >
       <CartItem.Image src={imageUrl} />
@@ -63,14 +57,14 @@ export default function CartDrawerItem({
         <hr className="my-3" />
 
         <div className="flex items-center justify-between">
-          <CartItem.CountButtons onClick={onChange} value={localQty} />
+          <CartItem.CountButtons onClick={onUpdate} value={count} />
 
           <button
             className="flex items-center gap-3"
             onClick={onRemove}
             disabled={disabled}
           >
-            <CartItem.Price value={price} />
+            <CartItem.Price value={total} />
             <Trash2Icon
               className="text-gray-400 cursor-pointer hover:text-red-500"
               size={16}
