@@ -125,14 +125,20 @@ model Order {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  total     Int
-  status    OrderStatus
-  paymentId String?
+  token String
 
   user   User? @relation(fields: [userId], references: [id])
   userId Int?
 
-  token String
+  total     Int
+  status    OrderStatus
+  paymentId String?
+
+  fullName String
+  email    String
+  phone    String
+  address  String
+  comment  String?
 
   items Json
 }

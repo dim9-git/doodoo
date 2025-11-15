@@ -14,18 +14,16 @@ import { PizzaParam } from "@/features/build-pizza"
  * @param type
  * @returns PizzaParam[]
  */
-export const getAvailablePizzaSizes = (
+export const getEnabledPizzaSizes = (
   items: ProductItem[],
   type: PizzaType
 ): PizzaParam[] => {
   const filteredPizzasByType = items.filter((item) => item.type === type)
-  const availableSizes = pizzaSizes.map((item) => ({
+  return pizzaSizes.map((item) => ({
     name: item.name,
     value: item.value,
     disabled: !filteredPizzasByType.some(
       (pizza) => Number(pizza.size) === Number(item.value)
     ),
   }))
-
-  return availableSizes
 }

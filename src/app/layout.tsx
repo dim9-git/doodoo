@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Nunito } from "next/font/google"
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
 
 import { Providers } from "@/widgets/providers"
 

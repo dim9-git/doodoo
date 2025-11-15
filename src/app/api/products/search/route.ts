@@ -6,15 +6,23 @@ export async function GET(req: NextRequest) {
 
   if (!query) {
     return NextResponse.json(
-      { error: "Запрос не может быть пустым" },
+      { message: "Запрос не может быть пустым" },
       { status: 400 }
     )
   }
 
-  const products = await prisma.product.findMany({
-    where: { name: { contains: query, mode: "insensitive" } },
-    take: 5,
-  })
+  try {
+    const products = await prisma.product.findMany({
+      where: { name: { contains: query, mode: "insensitive" } },
+      take: 5,
+    })
 
-  return NextResponse.json(products)
+    return NextResponse.json(products)
+  } catch (error) {
+    console.error("[PRODUCTS_SEARCH_GET] error:", error)
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    )
+  }
 }

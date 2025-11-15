@@ -1,4 +1,5 @@
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
+
 import { CartItemCountIconButton } from "./cart-item-count-icon-button"
 
 export interface CountButtonProps {

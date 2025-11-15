@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
 
 interface Props {
   value: number
@@ -6,5 +6,5 @@ interface Props {
 }
 
 export function CartItemPrice({ value, className }: Props) {
-  return <h2 className={cn("font-bold", className)}>{value} ₽</h2>
+  return <h2 className={cn("font-bold", className)}>{value} ₸</h2>
 }

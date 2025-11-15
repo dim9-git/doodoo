@@ -10,40 +10,38 @@ import {
 } from "@/entities/cart"
 import { CreateCartItemDTO } from "@/entities/cart-items"
 
-// import logger from "@/shared/lib/logger"
-
 export async function GET(req: NextRequest) {
+  const token = req.cookies.get("cartToken")?.value
+
+  if (!token) {
+    return NextResponse.json({ data: { id: null, items: [] } })
+  }
+
   try {
-    const token = req.cookies.get("cartToken")?.value
-
-    if (!token) {
-      return NextResponse.json({ cart: [] })
-    }
-
     const userCart = await findCartByToken(token)
 
-    if (userCart) {
-      return NextResponse.json({ data: userCart })
+    if (!userCart) {
+      return NextResponse.json({ data: { id: null, items: [] } })
     }
 
-    return NextResponse.json({ data: { id: null, items: [] } })
+    return NextResponse.json({ data: userCart })
   } catch (error) {
     console.error("[CART_GET] error:", error)
     return NextResponse.json(
-      { message: "[CART_GET] Server error" },
+      { message: "Internal server error" },
       { status: 500 }
     )
   }
 }
 
 export async function POST(req: NextRequest) {
+  let token = req.cookies.get("cartToken")?.value
+
+  if (!token) {
+    token = crypto.randomUUID()
+  }
+
   try {
-    let token = req.cookies.get("cartToken")?.value
-
-    if (!token) {
-      token = crypto.randomUUID()
-    }
-
     const data = (await req.json()) as CreateCartItemDTO
     const userCart = await findOrCreateCart(token)
 
@@ -104,7 +102,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("[CART_POST] error:", error)
     return NextResponse.json(
-      { message: "[CART_POST] Server error" },
+      { message: "Internal server error" },
       { status: 500 }
     )
   }

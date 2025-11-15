@@ -14,9 +14,14 @@ import HeaderCartButton from "./header-cart-button"
 interface Props {
   className?: string
   hasSearch?: boolean
+  hasCart?: boolean
 }
 
-export default async function Header({ className, hasSearch = true }: Props) {
+export default async function Header({
+  className,
+  hasSearch = true,
+  hasCart = true,
+}: Props) {
   const token = (await cookies()).get("cartToken")?.value
   const cart = token ? await findCartByToken(token) : null
 
@@ -49,7 +54,7 @@ export default async function Header({ className, hasSearch = true }: Props) {
             Войти
           </Button>
 
-          <HeaderCartButton initialData={cart} />
+          {hasCart && <HeaderCartButton initialData={cart} />}
         </div>
       </Container>
     </header>

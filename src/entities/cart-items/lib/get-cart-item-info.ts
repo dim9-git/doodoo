@@ -5,7 +5,7 @@ import {
   PizzaType,
 } from "@/entities/products"
 
-export const getCartItemInfoText = (
+export const getCartItemInfo = (
   pizzaType: number | null,
   pizzaSize: number | null,
   ingredients: Array<{ name: string }>

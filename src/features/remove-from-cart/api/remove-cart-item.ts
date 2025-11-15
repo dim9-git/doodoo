@@ -1,5 +1,6 @@
-import { CartResponseDTO } from "@/entities/cart/api/dto/response"
-import { http } from "@/shared/lib/http"
+import { http } from "@/shared"
+
+import { CartResponseDTO } from "@/entities/cart"
 
 export const removeCartItem = async (id: number) => {
   return (

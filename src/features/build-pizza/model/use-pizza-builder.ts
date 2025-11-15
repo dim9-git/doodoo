@@ -1,14 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useSet } from "react-use"
 import { ProductItem } from "@prisma/client"
 
-import {
-  getAvailablePizzaSizes,
-  PizzaSize,
-  PizzaType,
-} from "@/entities/products"
+import { getEnabledPizzaSizes, PizzaSize, PizzaType } from "@/entities/products"
 
 import { PizzaParam } from "../ui/group-pizza-params"
 
@@ -19,51 +15,54 @@ interface ReturnProps {
   setType: (type: PizzaType) => void
   selectedIngredients: Set<number>
   toggleIngredient: (id: number) => void
-  availableSizes: PizzaParam[]
+  enabledSizes: PizzaParam[]
   currentItem: ProductItem | undefined
 }
 
 export function usePizzaBuilder(items: ProductItem[]): ReturnProps {
-  const [type, setType] = useState<PizzaType>(1)
+  const [currType, setCurrType] = useState<PizzaType>(1)
+  const enabledSizes = getEnabledPizzaSizes(items, currType)
 
-  const availableSizes = getAvailablePizzaSizes(items, type)
-  const [size, setSize] = useState<PizzaSize>(() => {
-    const firstAvailableSize = availableSizes.find((item) => !item.disabled)
-    return Number(firstAvailableSize?.value) as PizzaSize
+  const [currSize, setCurrSize] = useState<PizzaSize>(() => {
+    const firstSize = enabledSizes.find((item) => !item.disabled)
+    return firstSize ? (Number(firstSize.value) as PizzaSize) : 20
   })
 
   const [selectedIngredients, { toggle: toggleIngredient }] = useSet(
     new Set<number>()
   )
 
-  const _setSize = (newSize: PizzaSize) => {
-    const isAvailableSize = availableSizes.some(
-      (item) => Number(item.value) === newSize && !item.disabled
-    )
+  const validSize = useMemo(() => {
+    const isDisabled = enabledSizes.find(
+      (item) => item.value === currSize.toString()
+    )?.disabled
 
-    if (isAvailableSize) {
-      setSize(newSize)
-    } else {
-      // If the new size is not available, find the first available size
-      const availableSize = availableSizes.find((item) => !item.disabled)
-      if (availableSize) {
-        setSize(Number(availableSize.value) as PizzaSize)
-      }
+    if (isDisabled) {
+      const firstSize = enabledSizes.find((item) => !item.disabled)
+      return firstSize ? (Number(firstSize.value) as PizzaSize) : currSize
     }
+
+    return currSize
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currType, currSize, enabledSizes])
+
+  // Change size when it becomes disabled
+  if (validSize !== currSize) {
+    setCurrSize(validSize)
   }
 
   const currentItem = items.find(
-    (item) => item.size === size && item.type === type
+    (item) => item.size === currSize && item.type === currType
   )
 
   return {
-    size,
-    setSize: _setSize,
-    type,
-    setType,
+    type: currType,
+    setType: setCurrType,
+    enabledSizes,
+    size: currSize,
+    setSize: setCurrSize,
     selectedIngredients,
     toggleIngredient,
-    availableSizes,
     currentItem,
   }
 }

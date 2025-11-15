@@ -36,8 +36,6 @@ export default function CatGroupProducts({
 
   React.useEffect(() => {
     if (intersection && intersection.isIntersecting) {
-      console.log("categoryId", categoryId, title)
-
       setCategoryId(categoryId)
     }
   }, [intersection, categoryId, setCategoryId, title])

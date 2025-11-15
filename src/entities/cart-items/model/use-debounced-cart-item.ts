@@ -1,21 +1,24 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import { useDebounce } from "react-use"
 
+import { CartState } from "@/entities/cart"
 import { UpdateCartVariables } from "@/features/update-cart"
 
 interface Props {
   id: number
   quantity: number
   price: number
-  updateItem: (paylod: UpdateCartVariables) => void
-  onItemChange?: (isPending: boolean) => void
+  updateItemAsync: (paylod: UpdateCartVariables) => Promise<CartState>
+  onItemChange?: (isCartLoading: boolean) => void
 }
 
-export const useDebouncedItem = ({
+export const useDebouncedCartItem = ({
   id,
   quantity,
   price,
-  updateItem,
+  updateItemAsync,
   onItemChange,
 }: Props) => {
   const [count, setCount] = useState(quantity)
@@ -38,7 +41,7 @@ export const useDebouncedItem = ({
   useDebounce(
     async () => {
       if (count !== quantity) {
-        await updateItem({ id, quantity: count })
+        await updateItemAsync({ id, quantity: count })
         onItemChange?.(false)
       }
     },
@@ -46,7 +49,7 @@ export const useDebouncedItem = ({
     [id, count, quantity, onItemChange]
   )
 
-  const onUpdate = (type: "plus" | "minus") => {
+  const onClickUpdate = (type: "plus" | "minus") => {
     const unitPrice = total / count
     const newCount = type === "minus" ? Math.max(1, count - 1) : count + 1
     const newTotal = unitPrice * newCount
@@ -58,6 +61,6 @@ export const useDebouncedItem = ({
   return {
     count,
     total,
-    onUpdate,
+    onClickUpdate,
   }
 }

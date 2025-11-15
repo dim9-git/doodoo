@@ -12,14 +12,27 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const id = Number((await params).id)
-    const body = (await req.json()) as UpdateCartItemDTO
-    const token = req.cookies.get("cartToken")?.value
+  const token = req.cookies.get("cartToken")?.value
 
-    if (!token) {
-      return NextResponse.json({ message: "No cart token was found" })
+  if (!token) {
+    return NextResponse.json(
+      { message: "Не найден токен корзины" },
+      { status: 401 }
+    )
+  }
+
+  try {
+    const { id: idString } = await params
+    const id = Number(idString)
+
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { message: "Некорректный ID корзины" },
+        { status: 400 }
+      )
     }
+
+    const body = (await req.json()) as UpdateCartItemDTO
 
     const cartItem = await prisma.cartItem.findFirst({
       where: {
@@ -29,7 +42,7 @@ export async function PATCH(
 
     if (!cartItem) {
       return NextResponse.json(
-        { message: "Cart item not found" },
+        { message: "Товар в корзине не найден" },
         { status: 404 }
       )
     }
@@ -48,25 +61,24 @@ export async function PATCH(
     const userCart = updatedCartItem.Cart
 
     if (!userCart) {
-      throw new Error("User cart not found")
+      throw new Error("Something went wrong with updating cart")
     }
 
     const updatedCart = await updateCartTotal(userCart)
 
     if (!updatedCart) {
       return NextResponse.json(
-        { message: "User cart not found" },
-        { status: 404 }
+        { message: "Не удалось обновить корзину" },
+        { status: 500 }
       )
     }
 
     return NextResponse.json({ data: updatedCart })
-
     // TODO: Return updated item
   } catch (error) {
-    console.error("[CART_PATCH] error:", error)
+    console.error("[CART_${ID}_PATCH] error:", error)
     return NextResponse.json(
-      { message: "[CART_PATCH] Server error" },
+      { message: "Internal server error" },
       { status: 500 }
     )
   }
@@ -76,9 +88,25 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const token = req.cookies.get("cartToken")?.value
+
+  if (!token) {
+    return NextResponse.json(
+      { message: "Не найден токен корзины" },
+      { status: 401 }
+    )
+  }
+
   try {
-    const id = Number((await params).id)
-    console.log("DELETE CART ITEM ID:", id)
+    const { id: idString } = await params
+    const id = Number(idString)
+
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { message: "Некорректный ID корзины" },
+        { status: 400 }
+      )
+    }
 
     const cartItem = await prisma.cartItem.findFirst({
       where: {
@@ -88,7 +116,7 @@ export async function DELETE(
 
     if (!cartItem) {
       return NextResponse.json(
-        { message: "Cart item not found" },
+        { message: "Товар в корзине не найден" },
         { status: 404 }
       )
     }
@@ -97,29 +125,22 @@ export async function DELETE(
       where: { id },
     })
 
-    const token = req.cookies.get("cartToken")?.value
-    if (!token) {
-      return NextResponse.json({ message: "No cart token was found" })
-    }
-
     const userCart = await updateCartTotalByToken(token)
 
     if (!userCart) {
       return NextResponse.json(
-        { message: "User cart not found" },
-        { status: 404 }
+        { message: "Не удалось обновить корзину" },
+        { status: 500 }
       )
     }
-
-    console.log("UPDATED CART AFTER DELETE:", userCart)
 
     return NextResponse.json({ data: userCart })
 
     // TODO: Return deleted item ID
   } catch (error) {
-    console.error("[CART_DELETE] error:", error)
+    console.error("[CART_${ID}_DELETE] error:", error)
     return NextResponse.json(
-      { message: "[CART_DELETE] Server error" },
+      { message: "Internal server error" },
       { status: 500 }
     )
   }

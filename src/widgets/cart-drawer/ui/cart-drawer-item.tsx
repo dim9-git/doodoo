@@ -1,42 +1,43 @@
 import { Trash2Icon } from "lucide-react"
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
 
-import { CartItem, CartItemProps } from "@/entities/cart-items"
+import {
+  CartItem,
+  CartItemProps,
+  useDebouncedCartItem,
+} from "@/entities/cart-items"
 
 import { useUpdateCart } from "@/features/update-cart"
 import { useRemoveFromCart } from "@/features/remove-from-cart"
 
-import { useDebouncedItem } from "../model/use-debounced-item"
-
 interface Props extends CartItemProps {
   className?: string
-  onItemChange?: (isPending: boolean) => void
+  onItemChange?: (isCartLoading: boolean) => void
 }
 
 export default function CartDrawerItem({
-  className,
   id,
   imageUrl,
   name,
   price, // total price from the server
   quantity, // quantity from the server
   details,
-  disabled,
+  className,
   onItemChange,
 }: Props) {
   const { updateItemAsync, isPending } = useUpdateCart()
   const { removeItem } = useRemoveFromCart()
 
-  const { count, total, onUpdate } = useDebouncedItem({
+  const { count, total, onClickUpdate } = useDebouncedCartItem({
     id,
     price,
     quantity,
-    updateItem: updateItemAsync,
+    updateItemAsync,
     onItemChange,
   })
 
-  const onRemove = () => {
+  const onClickRemove = () => {
     removeItem({ id })
   }
 
@@ -47,7 +48,6 @@ export default function CartDrawerItem({
         className,
         isPending && "pointer-events-none opacity-50"
       )}
-      id={id.toString()}
     >
       <CartItem.Image src={imageUrl} />
 
@@ -57,12 +57,12 @@ export default function CartDrawerItem({
         <hr className="my-3" />
 
         <div className="flex items-center justify-between">
-          <CartItem.CountButtons onClick={onUpdate} value={count} />
+          <CartItem.CountButtons onClick={onClickUpdate} value={count} />
 
           <button
             className="flex items-center gap-3"
-            onClick={onRemove}
-            disabled={disabled}
+            onClick={onClickRemove}
+            disabled={isPending}
           >
             <CartItem.Price value={total} />
             <Trash2Icon

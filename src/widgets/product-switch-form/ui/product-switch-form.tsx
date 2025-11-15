@@ -9,10 +9,10 @@ import { AddToCartVariables, useAddToCart } from "@/features/add-to-cart"
 
 export default function ProductSwitchForm({
   product,
-  _onSubmit,
+  onFormSubmit,
 }: {
   product: ProductResponseDTO
-  _onSubmit?: VoidFunction
+  onFormSubmit?: VoidFunction
 }) {
   const { addItemAsync, isPending: isLoading } = useAddToCart()
 
@@ -22,14 +22,14 @@ export default function ProductSwitchForm({
   const onSubmit = async (payload: AddToCartVariables) => {
     await addItemAsync(payload, {
       onSuccess: () => {
-        toast.success("Товар добавлен в корзину", {})
+        toast.success(`${product.name} добавлен в корзину`)
       },
       onError: () => {
         toast.error("Ошибка при добавлении товара")
       },
     })
 
-    _onSubmit?.()
+    onFormSubmit?.()
   }
 
   return isPizza ? (

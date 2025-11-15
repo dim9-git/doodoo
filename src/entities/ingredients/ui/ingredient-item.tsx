@@ -2,7 +2,7 @@ import Image from "next/image"
 
 import { CircleCheck } from "lucide-react"
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
 
 interface Props {
   active: boolean
@@ -43,7 +43,7 @@ export default function IngredientItem({
         />
       ) : null}
       <span className="text-xs mb-1">{name}</span>
-      <span className="font-bold">{price} ₽</span>
+      <span className="font-bold">{price} ₸</span>
     </div>
   )
 }

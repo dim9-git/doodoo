@@ -44,7 +44,7 @@ export default function ProductCard({ className, product }: Props) {
 
         <div className="flex justify-between items-center mt-4 gap-2">
           <span className="text-[20px]">
-            от <b>{product.price} ₽</b>
+            от <b>{product.price} ₸</b>
           </span>
 
           <Button

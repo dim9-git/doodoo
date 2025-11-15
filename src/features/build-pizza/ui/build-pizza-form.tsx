@@ -44,7 +44,7 @@ export default function BuildPizzaForm({
     setType,
     selectedIngredients,
     toggleIngredient,
-    availableSizes,
+    enabledSizes,
     currentItem,
   } = usePizzaBuilder(items)
 
@@ -65,7 +65,7 @@ export default function BuildPizzaForm({
         ingredientsIds: Array.from(selectedIngredients),
       },
       optItem: {
-        id: Number(`${productItemId}-${Date.now()}`),
+        id: Number(`${productItemId}${Math.random()}`),
         name,
         price,
         quantity: 1,
@@ -92,7 +92,7 @@ export default function BuildPizzaForm({
 
         <div className="space-y-5">
           <GroupPizzaOptions
-            items={availableSizes}
+            items={enabledSizes}
             onClick={(value) => setSize(Number(value) as PizzaSize)}
             value={size.toString()}
           />
@@ -124,7 +124,7 @@ export default function BuildPizzaForm({
           onClick={onClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
-          Добавить в корзину за {price} ₽
+          Добавить в корзину за {price} ₸
         </Button>
       </div>
     </div>

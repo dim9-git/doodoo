@@ -36,7 +36,10 @@ export default function ChooseProductModal({ product, className }: Props) {
           <DialogDescription>Выберите продукт</DialogDescription>
         </DialogHeader>
 
-        <ProductSwitchForm product={product} _onSubmit={() => router.back()} />
+        <ProductSwitchForm
+          product={product}
+          onFormSubmit={() => router.back()}
+        />
       </DialogContent>
     </Dialog>
   )

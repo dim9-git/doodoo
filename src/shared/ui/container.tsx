@@ -1,10 +1,9 @@
 import React from "react"
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from "../lib/utils"
 
-interface Props {
+interface Props extends React.PropsWithChildren {
   className?: string
-  children: React.ReactNode
 }
 
 export function Container({ className, children }: Props) {

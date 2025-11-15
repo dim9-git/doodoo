@@ -1,6 +1,13 @@
+import { Metadata } from "next"
+
 import { Toaster } from "@/shared"
 
 import Header from "@/widgets/header"
+
+export const metadata: Metadata = {
+  title: "DooDoo Pizza",
+  description: "DooDoo Pizza - Лучшая пицца в городе",
+}
 
 export default function MainLayout({
   children,
@@ -16,7 +23,7 @@ export default function MainLayout({
         {children}
       </main>
       {modal}
-      <Toaster />
+      <Toaster richColors />
     </>
   )
 }

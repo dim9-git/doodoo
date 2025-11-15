@@ -4,6 +4,7 @@ import { useSet } from "react-use"
 
 import { getIngredients } from "../api/get-ingredients"
 
+export const INGREDIENTS_KEY = ["ingredients"] as const
 interface ReturnProps {
   ingridients: Ingredient[] | undefined
   selectedIngridients: Set<string>
@@ -20,7 +21,7 @@ export function useIngridients(): ReturnProps {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["ingridients"],
+    queryKey: INGREDIENTS_KEY,
     queryFn: getIngredients,
   })
 

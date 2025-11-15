@@ -1,11 +1,18 @@
-import { cn } from "@/shared/lib/utils"
+import { cn, Skeleton } from "@/shared"
 
 interface Props {
-  src: string
+  src: string | null
   className?: string
 }
 
 export function CartItemImage({ src, className }: Props) {
+  if (!src)
+    return (
+      <div>
+        <Skeleton className={cn("w-[60px] h-[60px]", className)} />
+      </div>
+    )
+
   return (
     <img
       className={cn("w-[60px] h-[60px]", className)}

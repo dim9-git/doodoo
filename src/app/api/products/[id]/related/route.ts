@@ -9,23 +9,26 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params
-  const nId = Number(id)
+  const { id: idString } = await params
+  const id = Number(idString)
 
-  if (isNaN(nId)) {
-    return NextResponse.json({ message: "Invalid product ID" }, { status: 400 })
+  if (isNaN(id)) {
+    return NextResponse.json(
+      { message: "Неверный ID продукта" },
+      { status: 400 }
+    )
   }
 
   try {
-    const relatedProducts = await getRelatedProducts(nId)
+    const relatedProducts = await getRelatedProducts(id)
 
     return NextResponse.json({
       data: relatedProducts,
     } satisfies RelatedProductsResponseDTO)
   } catch (error) {
-    console.error("[RELATED_PRODUCTS] error:", error)
+    console.error("[PRODUCTS_${ID}_RELATED_GET] error:", error)
     return NextResponse.json(
-      { message: "[RELATED_PRODUCTS] Server error" },
+      { message: "Internal server error" },
       { status: 500 }
     )
   }

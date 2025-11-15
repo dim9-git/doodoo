@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from "@/shared"
 
 interface Props {
   className?: string

@@ -21,7 +21,6 @@ export function useAddToCart() {
     isSuccess,
   } = useMutation({
     mutationFn: async ({ payload }: AddToCartVariables) => {
-      console.log("[MUTATE ADD] payload:", payload)
       const responseDTO = await addCartItem(payload)
       return mapCartToState(responseDTO)
     },
@@ -60,7 +59,7 @@ export function useAddToCart() {
 
         const { optItem } = context
 
-        const newItem = data.items.find((item) => item.id === optItem.id)
+        const newItem = current.items.find((item) => item.id === optItem.id)
         if (!newItem) return data
 
         return current

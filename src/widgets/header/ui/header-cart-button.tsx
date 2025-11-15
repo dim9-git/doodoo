@@ -23,7 +23,7 @@ export default function HeaderCartButton({ initialData }: Props) {
   return (
     <CartDrawer>
       <Button className="group relative">
-        <b>{totalPrice.toLocaleString("ru-RU")} ₽</b>
+        <b>{totalPrice.toLocaleString("ru-RU")} </b>
         <span className="h-full w-[1px] bg-white/30 mx-3" />
         <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
           <ShoppingCart size={16} className="relative" strokeWidth={2} />

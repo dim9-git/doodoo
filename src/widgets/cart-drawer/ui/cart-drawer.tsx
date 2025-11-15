@@ -1,21 +1,23 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import Image from "next/image"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import {
   Button,
   cn,
   Sheet,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  Title,
 } from "@/shared"
 
-import { getCartItemInfoText } from "@/entities/cart-items"
+import { getCartItemInfo } from "@/entities/cart-items"
 import { useCart } from "@/entities/cart"
 
 import CartDrawerItem from "./cart-drawer-item"
@@ -27,74 +29,120 @@ interface Props {
 }
 
 export default function CartDrawer({ children }: Props) {
-  const { cart } = useCart()
-  const [isCartPending, setIsCartPending] = useState<boolean>(false)
+  const { cart, setIsUpdating, isUpdating } = useCart()
 
-  const onItemChange = (isPending: boolean) => {
-    setIsCartPending(isPending)
-  }
+  const totalAmount = cart?.total ? cart.total : 0
 
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#f4f1ee]">
-        <SheetHeader>
-          <SheetTitle>
-            В корзине{" "}
-            <span className="font-bold">
-              {cart?.items.length} {getCartLengthLabel(cart?.items.length)}
-            </span>
-          </SheetTitle>
-        </SheetHeader>
+        <div
+          className={cn(
+            "flex flex-col h-full",
+            !totalAmount && "justify-center"
+          )}
+        >
+          {totalAmount > 0 ? (
+            <SheetHeader>
+              <SheetTitle>
+                В корзине{" "}
+                <span className="font-bold">
+                  {cart?.items.length} {getCartLengthLabel(cart?.items.length)}
+                </span>
+              </SheetTitle>
+            </SheetHeader>
+          ) : (
+            <SheetHeader className="sr-only">
+              <SheetTitle>Корзина пустая</SheetTitle>
+            </SheetHeader>
+          )}
 
-        {/* Items */}
-        <div className="-mx-6 overflow-auto flex-1">
-          <div className="mb-2">
-            {cart?.items.map((item, idx) => (
-              <CartDrawerItem
-                key={`${idx}-${item.id}`}
-                id={item.id}
-                imageUrl={item.coverImageUrl ?? ""}
-                details={getCartItemInfoText(
-                  item.pizzaType,
-                  item.pizzaSize,
-                  item.ingredients
-                )}
-                name={item.name}
-                price={item.price}
-                quantity={item.quantity}
-                className="mb-6"
-                onItemChange={onItemChange}
+          {!(totalAmount > 0) ? (
+            <div className="flex flex-col items-center justify-center w-72 mx-auto">
+              <Image
+                src="/images/empty-box.png"
+                alt="Empty cart"
+                width={120}
+                height={120}
               />
-            ))}
-          </div>
-        </div>
+              <Title
+                size="sm"
+                text="Корзина пустая"
+                className="text-center font-bold my-2"
+              />
+              <p className="text-center text-neutral-500 mb-5">
+                Добавьте хотя бы одну пиццу, чтобы совершить заказ
+              </p>
 
-        <SheetFooter className="-mx-6 bg-white p-8">
-          <div className="w-full">
-            <div className="flex mb-4">
-              <span className="flex flex-1 text-lg text-neutral-500">
-                Итого:
-                <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
-              </span>
-              <span
-                className={cn(
-                  "font-bold text-lg flex items-center gap-1",
-                  isCartPending && "pointer-events-none opacity-50"
-                )}
-              >
-                {cart?.total.toLocaleString("ru-RU")} ₽
-              </span>
+              <SheetClose>
+                <Button asChild className="w-56 h-12 text-base" size="lg">
+                  <span>
+                    <ArrowLeft className="w-5 mr-2" />
+                    Вернуться назад
+                  </span>
+                </Button>
+              </SheetClose>
             </div>
+          ) : null}
 
-            <Link href={"/cart"}>
-              <Button type="submit" className="w-full h-12 text-base">
-                Оформить заказ
-                <ArrowRight className="w-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </SheetFooter>
+          {/* Items */}
+          {totalAmount > 0 ? (
+            <>
+              <div className="-mx-6 overflow-auto flex-1">
+                <div className="mb-2">
+                  {cart?.items.map((item, idx) => (
+                    <CartDrawerItem
+                      key={`cdwi_${idx}_${item.id}`}
+                      id={item.id}
+                      name={item.name}
+                      price={item.price}
+                      quantity={item.quantity}
+                      imageUrl={item.coverImageUrl}
+                      details={getCartItemInfo(
+                        item.pizzaType,
+                        item.pizzaSize,
+                        item.ingredients
+                      )}
+                      className="mb-6"
+                      onItemChange={setIsUpdating}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <SheetFooter className="-mx-6 bg-white p-8">
+                <div className="w-full">
+                  <div className="flex mb-4">
+                    <span className="flex flex-1 text-lg text-neutral-500">
+                      Итого:
+                      <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
+                    </span>
+                    <span
+                      className={cn(
+                        "font-bold text-lg flex items-center gap-1",
+                        isUpdating && "pointer-events-none opacity-50 shimmer"
+                      )}
+                    >
+                      {totalAmount.toLocaleString("ru-RU")} ₸
+                    </span>
+                  </div>
+
+                  <Link href={"/checkout"}>
+                    <Button
+                      type="submit"
+                      disabled={isUpdating}
+                      className="w-full h-12 text-base disabled:bg-primary/80"
+                    >
+                      Оформить заказ
+                      <ArrowRight className="w-5 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </SheetFooter>
+            </>
+          ) : null}
+        </div>
       </SheetContent>
     </Sheet>
   )

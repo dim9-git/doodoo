@@ -56,7 +56,7 @@ export default function AddOnProductForm({
           onClick={onClickAdd}
           className="w-full h-[55px] mt-10 px-10 rounded-[18px] text-base"
         >
-          Добавить в корзину за {price} ₽
+          Добавить в корзину за {price} ₸
         </Button>
       </div>
     </div>
