@@ -74,6 +74,7 @@ export function AutocompleteInput({
                 <CommandItem
                   key={`${id}_${option.value.slice(0, 7)}`}
                   value={option.value}
+                  className="cursor-pointer"
                   onSelect={() => {
                     onChange(option.value)
                     setOpen(false)

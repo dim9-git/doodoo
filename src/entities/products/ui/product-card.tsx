@@ -1,6 +1,5 @@
 import Image from "next/image"
 import Link from "next/link"
-
 import { Plus } from "lucide-react"
 
 import { Button, Title, cn } from "@/shared"
@@ -16,7 +15,7 @@ interface Props {
 
 export default function ProductCard({ className, product }: Props) {
   return (
-    <div className={cn(className, "group")}>
+    <div className={cn(className, "group flex flex-col max-h-full")}>
       <Link href={`/products/${product.id}`} scroll={false}>
         <div className="flex justify-center p-6 bg-secondary rounded-lg max-h-[260px] w-full group-hover:shadow-md transition-all">
           {product.coverUrl ? (
@@ -33,7 +32,7 @@ export default function ProductCard({ className, product }: Props) {
         </div>
       </Link>
 
-      <div className="mt-1">
+      <div className="mt-1 h-full flex flex-col">
         <Title text={product.name} className="font-bold" size="sm" />
 
         <p className="text-sm text-gray-400">
@@ -42,7 +41,7 @@ export default function ProductCard({ className, product }: Props) {
 
         <p className="mt-3 text-sm text-gray-500">{product.description}</p>
 
-        <div className="flex justify-between items-center mt-4 gap-2">
+        <div className="flex justify-between items-center mt-auto gap-2">
           <span className="text-[20px]">
             от <b>{product.price} ₸</b>
           </span>
@@ -50,10 +49,10 @@ export default function ProductCard({ className, product }: Props) {
           <Button
             size="sm"
             variant="secondary"
-            className="font-bold"
+            className="font-bold group/button"
             type="button"
           >
-            <Plus className="size-5 mr-1" />
+            <Plus className="size-5 mr-1 group-hover/button:rotate-90 transition-transform" />
             Добавить
           </Button>
         </div>

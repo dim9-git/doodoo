@@ -29,7 +29,12 @@ export const CheckoutSidebar: React.FC<Props> = ({
         {isLoading ? (
           <Skeleton className="h-11 w-48" />
         ) : (
-          <span className="h-11 text-[34px] font-extrabold">
+          <span
+            className={cn(
+              "h-11 text-[34px] font-extrabold",
+              isButtonDisabled && "shimmer"
+            )}
+          >
             {finalPrice} ₸
           </span>
         )}
@@ -85,10 +90,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
         isLoading={isLoading}
         disabled={isButtonDisabled}
         type="submit"
-        className={cn(
-          "w-full h-14 rounded-2xl mt-6 text-base font-bold disabled:bg-primary/80",
-          isButtonDisabled && "shimmer"
-        )}
+        className="w-full h-14 rounded-2xl mt-6 text-base font-bold disabled:bg-primary/80"
       >
         Перейти к оплате
         <ArrowRight className="w-5 ml-2" />
