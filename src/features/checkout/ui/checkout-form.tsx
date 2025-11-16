@@ -71,7 +71,8 @@ export default function CheckoutForm() {
             <CheckoutSidebar
               totalAmount={totalAmount}
               isLoading={isLoading}
-              isButtonDisabled={isUpdating}
+              isUpdating={isUpdating}
+              isSubmitting={isPlacingOrder}
             />
           </div>
         </div>

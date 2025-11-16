@@ -17,8 +17,10 @@ interface Props {
 export default function HeaderCartButton({ initialData }: Props) {
   // seeds initial cart data for useQuery cache
   const { cart } = useCart({ initialData })
-  const totalPrice = cart?.total ?? 0
-  const count = cart?.items.length ?? 0
+
+  // Use initialData if cart hasn't loaded yet (prevents hydration mismatch)
+  const totalPrice = cart?.total ?? initialData?.total ?? 0
+  const count = cart?.items.length ?? initialData?.items?.length ?? 0
 
   return (
     <CartDrawer>

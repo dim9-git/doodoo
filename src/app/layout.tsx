@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Nunito } from "next/font/google"
 
-import { cn } from "@/shared"
+import { cn, APP_NAME } from "@/shared"
 
 import { Providers } from "@/widgets/providers"
 
@@ -13,8 +13,8 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  title: "DooDoo Pizza",
-  description: "DooDoo Pizza - Лучшая пицца в городе",
+  title: APP_NAME,
+  description: APP_NAME + " - Лучшая пицца в городе",
 }
 
 export default function RootLayout({

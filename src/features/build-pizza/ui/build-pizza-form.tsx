@@ -24,7 +24,7 @@ interface Props {
   coverUrl: string
   ingredients: Ingredient[]
   items: ProductItem[]
-  isLoading?: boolean
+  isAdding?: boolean
   onSubmit: (payload: AddToCartVariables) => void
 }
 
@@ -34,7 +34,7 @@ export default function BuildPizzaForm({
   coverUrl,
   items,
   ingredients,
-  isLoading,
+  isAdding,
   onSubmit,
 }: Props) {
   const {
@@ -120,8 +120,9 @@ export default function BuildPizzaForm({
         </div>
 
         <Button
-          isLoading={isLoading}
+          isLoading={isAdding}
           onClick={onClickAdd}
+          disabled={isAdding}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
           Добавить в корзину за {price} ₸

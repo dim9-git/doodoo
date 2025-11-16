@@ -9,6 +9,7 @@ import {
   findCartByToken,
 } from "@/entities/cart"
 import { CreateCartItemDTO } from "@/entities/cart-items"
+import { getRateLimitIdentifier, moderateRateLimit } from "@/shared"
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("cartToken")?.value
@@ -35,6 +36,18 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const identifier = getRateLimitIdentifier(req)
+
+  const { success, reset } = await moderateRateLimit.limit(identifier)
+
+  if (!success) {
+    const retryAfter = Math.round((reset - Date.now()) / 1000)
+    return NextResponse.json(
+      { message: "Слишком много попыток. Попробуйте позже.", retryAfter },
+      { status: 429, headers: { "Retry-After": retryAfter.toString() } }
+    )
+  }
+
   let token = req.cookies.get("cartToken")?.value
 
   if (!token) {

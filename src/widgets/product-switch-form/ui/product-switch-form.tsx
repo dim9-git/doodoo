@@ -3,6 +3,7 @@
 import { toast } from "sonner"
 
 import { ProductResponseDTO, AddOnProductForm } from "@/entities/products"
+import { useCart } from "@/entities/cart"
 
 import { BuildPizzaForm } from "@/features/build-pizza"
 import { AddToCartVariables, useAddToCart } from "@/features/add-to-cart"
@@ -14,12 +15,14 @@ export default function ProductSwitchForm({
   product: ProductResponseDTO
   onFormSubmit?: VoidFunction
 }) {
-  const { addItemAsync, isPending: isLoading } = useAddToCart()
+  const { setIsAdding } = useCart()
+  const { addItemAsync, isPending } = useAddToCart()
 
   const firstItem = product.items[0]
   const isPizza = Boolean(firstItem.type)
 
   const onSubmit = async (payload: AddToCartVariables) => {
+    setIsAdding(true)
     await addItemAsync(payload, {
       onSuccess: () => {
         toast.success(`${product.name} добавлен в корзину`)
@@ -28,6 +31,7 @@ export default function ProductSwitchForm({
         toast.error("Ошибка при добавлении товара")
       },
     })
+    setIsAdding(false)
 
     onFormSubmit?.()
   }
@@ -39,7 +43,7 @@ export default function ProductSwitchForm({
       items={product.items}
       ingredients={product.ingredients}
       onSubmit={onSubmit}
-      isLoading={isLoading}
+      isAdding={isPending}
     />
   ) : (
     <AddOnProductForm
@@ -48,7 +52,7 @@ export default function ProductSwitchForm({
       coverUrl={product.coverUrl ?? ""}
       price={firstItem.price}
       onSubmit={onSubmit}
-      isLoading={isLoading}
+      isAdding={isPending}
     />
   )
 }

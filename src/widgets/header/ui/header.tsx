@@ -3,11 +3,11 @@ import Image from "next/image"
 import { cookies } from "next/headers"
 import { User } from "lucide-react"
 
-import { Button, Container, cn } from "@/shared"
+import { Button, Container, cn, APP_NAME, safe } from "@/shared"
 
 import { findCartByToken } from "@/entities/cart"
 
-import SearchInput from "@/features/search-products/ui/search-input"
+import { SearchInput } from "@/features/search-products"
 
 import HeaderCartButton from "./header-cart-button"
 
@@ -23,7 +23,10 @@ export default async function Header({
   hasCart = true,
 }: Props) {
   const token = (await cookies()).get("cartToken")?.value
-  const cart = token ? await findCartByToken(token) : null
+
+  const cart = token
+    ? await safe(() => findCartByToken(token), "[HEADER] fetch cart")
+    : null
 
   return (
     <header className={cn("border border-b", className)}>
@@ -33,7 +36,7 @@ export default async function Header({
           <div className="flex items-center gap-4">
             <Image src="/logo.png" alt="Logo" width={35} height={35} />
             <div>
-              <h1 className="text-2xl uppercase font-black">Doodoo Pizza</h1>
+              <h1 className="text-2xl uppercase font-black">{APP_NAME}</h1>
               <p className="text-sm text-gray-400 leading-3">
                 лучшая пицца в городе
               </p>

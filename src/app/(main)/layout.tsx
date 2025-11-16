@@ -1,12 +1,12 @@
 import { Metadata } from "next"
 
-import { Toaster } from "@/shared"
+import { APP_NAME, Toaster } from "@/shared"
 
 import Header from "@/widgets/header"
 
 export const metadata: Metadata = {
-  title: "DooDoo Pizza",
-  description: "DooDoo Pizza - Лучшая пицца в городе",
+  title: APP_NAME,
+  description: APP_NAME + " - Лучшая пицца в городе",
 }
 
 export default function MainLayout({

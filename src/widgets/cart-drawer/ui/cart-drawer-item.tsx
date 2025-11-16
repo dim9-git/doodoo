@@ -13,6 +13,7 @@ import { useRemoveFromCart } from "@/features/remove-from-cart"
 
 interface Props extends CartItemProps {
   className?: string
+  isAdding?: boolean
   onItemChange?: (isCartLoading: boolean) => void
 }
 
@@ -24,6 +25,7 @@ export default function CartDrawerItem({
   quantity, // quantity from the server
   details,
   className,
+  isAdding,
   onItemChange,
 }: Props) {
   const { updateItemAsync, isPending } = useUpdateCart()
@@ -46,7 +48,7 @@ export default function CartDrawerItem({
       className={cn(
         "flex bg-white gap-6 p-4",
         className,
-        isPending && "pointer-events-none opacity-50"
+        (isPending || isAdding) && "pointer-events-none opacity-50"
       )}
     >
       <CartItem.Image src={imageUrl} />

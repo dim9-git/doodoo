@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
+
+import { getRateLimitIdentifier, strictRateLimit } from "@/shared"
 
 export async function GET() {
   try {
@@ -15,9 +17,26 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
+  const identifier = getRateLimitIdentifier(req)
+
+  const { success, reset } = await strictRateLimit.limit(identifier)
+
+  if (!success) {
+    const retryAfter = Math.round((reset - Date.now()) / 1000)
+    return NextResponse.json(
+      { message: "Слишком много попыток. Попробуйте позже.", retryAfter },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": retryAfter.toString(),
+        },
+      }
+    )
+  }
+
   try {
-    const body = await request.json()
+    const body = await req.json()
 
     const { password, email, firstName } = body
 

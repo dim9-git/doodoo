@@ -5,23 +5,29 @@ import { cookies } from "next/headers"
 import { OrderStatus } from "@prisma/client"
 import { prisma } from "db/prisma"
 
+import { APP_NAME, moderateRateLimit, sendMail } from "@/shared"
+
 import { CheckoutFormValues } from "../model/schema"
-import { stripe } from "../lib/stripe"
-import { CANCEL_URL, DELIVERY_PRICE, SUCCESS_URL } from "../model/constants"
-import {
-  StripeCheckoutResponseDTO,
-  StripeSessionCreateMetadataDTO,
-} from "./dto/response"
+import { DELIVERY_PRICE } from "../model/constants"
+import { CheckoutResponseDTO } from "./dto/response"
+import { PayOrderTemplate } from "../ui/mail-templates/pay-order-template"
+import { createStripeSession } from "../lib/create-stripe-session"
 
 export const createOrder = async (
   data: CheckoutFormValues
-): Promise<StripeCheckoutResponseDTO> => {
+): Promise<CheckoutResponseDTO> => {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get("cartToken")?.value
 
     if (!token) {
       throw new Error("Cart token not found")
+    }
+
+    const { success } = await moderateRateLimit.limit(`server-action:${token}`)
+
+    if (!success) {
+      throw new Error("Rate limit exceeded. Please try again later.")
     }
 
     const userCart = await prisma.cart.findFirst({
@@ -75,33 +81,12 @@ export const createOrder = async (
     // Create Stripe payment
     const idempotencyKey = `order-${newOrder.id}-${randomUUID()}`
 
-    const stripeSession = await stripe.checkout.sessions.create(
-      {
-        success_url: SUCCESS_URL,
-        cancel_url: CANCEL_URL,
-        payment_method_types: ["card"],
-        mode: "payment",
-        customer_email: data.email,
-        line_items: [
-          {
-            price_data: {
-              currency: "kzt",
-              product_data: {
-                name: "Заказ #" + newOrder.id,
-              },
-              unit_amount: finalTotal * 100,
-            },
-            quantity: 1,
-          },
-        ],
-        metadata: {
-          orderId: newOrder.id,
-          userId: newOrder.userId,
-        } satisfies StripeSessionCreateMetadataDTO,
-      },
-      {
-        idempotencyKey,
-      }
+    const stripeSession = await createStripeSession(
+      data.email,
+      newOrder.id,
+      newOrder.userId,
+      finalTotal,
+      idempotencyKey
     )
 
     // Clear cart
@@ -120,8 +105,24 @@ export const createOrder = async (
       },
     })
 
+    const paymentUrl = stripeSession.url
+
+    const { error: sendMailError } = await sendMail(
+      data.email,
+      `${APP_NAME} - Оплатите заказ #${newOrder.id}`,
+      PayOrderTemplate({
+        orderId: newOrder.id,
+        totalAmount: newOrder.total,
+        paymentUrl: paymentUrl ?? "",
+      })
+    )
+
+    if (sendMailError) {
+      throw new Error("Failed to send email")
+    }
+
     return {
-      paymentUrl: stripeSession.url,
+      paymentUrl,
     }
   } catch (error) {
     console.error("[CREATE_ORDER] error:", error)

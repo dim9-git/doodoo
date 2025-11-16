@@ -34,11 +34,13 @@ export function useAddToCart() {
         if (!old) return old
 
         // item.price is totalPrice
-        const newItemTotal = optItem.price * optItem.quantity
+        const newItemPrice = optItem.price * optItem.quantity
+
+        const prevTotalAmount = old.total ? old.total : 0
 
         return {
           items: [optItem, ...old.items],
-          total: old.total + newItemTotal,
+          total: prevTotalAmount + newItemPrice,
         }
       })
 
@@ -59,10 +61,36 @@ export function useAddToCart() {
 
         const { optItem } = context
 
-        const newItem = current.items.find((item) => item.id === optItem.id)
-        if (!newItem) return data
+        // Find optimistic item index
+        const oIdx = current.items.findIndex((item) => item.id === optItem.id)
 
-        return current
+        if (oIdx === -1) {
+          // Optimistic item not found, use full server data
+          return data
+        }
+
+        // Find the new real item in server response
+        // It's the item that doesn't exist in current cart (excluding optimistic item)
+        const currentOtherItemIds = current.items
+          .filter((item) => item.id !== optItem.id)
+          .map((item) => item.id)
+
+        const realItem = data.items.find(
+          (item) => !currentOtherItemIds.includes(item.id)
+        )
+
+        if (!realItem) {
+          // Couldn't find new item, use server data as fallback
+          return data
+        }
+
+        const updatedItems = [...current.items]
+        updatedItems[oIdx] = realItem
+
+        return {
+          items: updatedItems,
+          total: data.total,
+        }
       })
     },
   })

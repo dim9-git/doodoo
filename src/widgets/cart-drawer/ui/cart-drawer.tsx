@@ -29,9 +29,11 @@ interface Props {
 }
 
 export default function CartDrawer({ children }: Props) {
-  const { cart, setIsUpdating, isUpdating } = useCart()
+  const { cart, setIsUpdating, isUpdating, isAdding } = useCart()
 
   const totalAmount = cart?.total ? cart.total : 0
+
+  const isDisabled = isUpdating || isAdding
 
   return (
     <Sheet>
@@ -106,6 +108,7 @@ export default function CartDrawer({ children }: Props) {
                       )}
                       className="mb-6"
                       onItemChange={setIsUpdating}
+                      isAdding={isAdding}
                     />
                   ))}
                 </div>
@@ -131,7 +134,7 @@ export default function CartDrawer({ children }: Props) {
                   <Link href={"/checkout"}>
                     <Button
                       type="submit"
-                      disabled={isUpdating}
+                      disabled={isDisabled}
                       className="w-full h-12 text-base disabled:bg-primary/80"
                     >
                       Оформить заказ

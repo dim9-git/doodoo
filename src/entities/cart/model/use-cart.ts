@@ -6,7 +6,7 @@ import { useCartStore } from "./use-cart-store"
 
 export const CART_KEY = ["cart"] as const
 
-export function useCart(opts?: { initialData?: CartResponseDTO | null }) {
+export function useCart(params?: { initialData?: CartResponseDTO | null }) {
   const {
     data: cart,
     isError,
@@ -17,12 +17,16 @@ export function useCart(opts?: { initialData?: CartResponseDTO | null }) {
     queryFn: async () => {
       return mapCartToState(await getCart())
     },
-    initialData: opts?.initialData
-      ? mapCartToState(opts.initialData)
+    initialData: params?.initialData
+      ? mapCartToState(params.initialData)
       : undefined,
+    // Prevent refetch on mount when we have initialData (SSR)
+    refetchOnMount: !params?.initialData,
+    // Prevent refetch on window focus when we have initialData
+    refetchOnWindowFocus: !params?.initialData,
   })
 
-  const { isUpdating, setIsUpdating } = useCartStore()
+  const { isUpdating, setIsUpdating, isAdding, setIsAdding } = useCartStore()
 
   return {
     cart,
@@ -31,5 +35,7 @@ export function useCart(opts?: { initialData?: CartResponseDTO | null }) {
     isSuccess,
     isUpdating,
     setIsUpdating,
+    isAdding,
+    setIsAdding,
   }
 }

@@ -9,14 +9,16 @@ import { VAT_PERCENT, DELIVERY_PRICE } from "../model/constants"
 interface Props {
   totalAmount: number
   isLoading?: boolean
-  isButtonDisabled?: boolean
+  isUpdating?: boolean
+  isSubmitting?: boolean
   className?: string
 }
 
 export const CheckoutSidebar: React.FC<Props> = ({
   totalAmount,
   isLoading,
-  isButtonDisabled,
+  isUpdating,
+  isSubmitting,
   className,
 }) => {
   const finalPrice = totalAmount + DELIVERY_PRICE
@@ -32,7 +34,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           <span
             className={cn(
               "h-11 text-[34px] font-extrabold",
-              isButtonDisabled && "shimmer"
+              isUpdating && "shimmer"
             )}
           >
             {finalPrice} ₸
@@ -87,8 +89,8 @@ export const CheckoutSidebar: React.FC<Props> = ({
       />
 
       <Button
-        isLoading={isLoading}
-        disabled={isButtonDisabled}
+        isLoading={isLoading || isSubmitting}
+        disabled={isUpdating || isSubmitting}
         type="submit"
         className="w-full h-14 rounded-2xl mt-6 text-base font-bold disabled:bg-primary/80"
       >

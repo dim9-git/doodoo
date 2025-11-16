@@ -12,7 +12,7 @@ interface Props {
   name: string
   coverUrl: string
   price: number
-  isLoading?: boolean
+  isAdding?: boolean
   onSubmit: (payload: AddToCartVariables) => void
 }
 
@@ -22,7 +22,7 @@ export default function AddOnProductForm({
   name,
   coverUrl,
   price,
-  isLoading,
+  isAdding,
   onSubmit,
 }: Props) {
   const onClickAdd = () => {
@@ -52,7 +52,8 @@ export default function AddOnProductForm({
         <Title text={name} size="md" className="font-extrabold" />
 
         <Button
-          isLoading={isLoading}
+          isLoading={isAdding}
+          disabled={isAdding}
           onClick={onClickAdd}
           className="w-full h-[55px] mt-10 px-10 rounded-[18px] text-base"
         >

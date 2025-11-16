@@ -1,4 +1,4 @@
-export type StripeCheckoutResponseDTO = {
+export type CheckoutResponseDTO = {
   paymentUrl: string | null
   error?: string
 }
