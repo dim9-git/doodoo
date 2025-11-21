@@ -11,16 +11,16 @@ import { CartDrawer } from "@/widgets/cart-drawer"
 interface Props {
   total?: number
   itemsCount?: number
-  initialData: CartResponseDTO | null
+  initialCart: CartResponseDTO | null
 }
 
-export default function HeaderCartButton({ initialData }: Props) {
+export default function HeaderCartButton({ initialCart }: Props) {
   // seeds initial cart data for useQuery cache
-  const { cart } = useCart({ initialData })
+  const { cart } = useCart({ initialData: initialCart })
 
-  // Use initialData if cart hasn't loaded yet (prevents hydration mismatch)
-  const totalPrice = cart?.total ?? initialData?.total ?? 0
-  const count = cart?.items.length ?? initialData?.items?.length ?? 0
+  // Use initialCart if cart hasn't loaded yet (prevents hydration mismatch)
+  const totalPrice = cart?.total ?? initialCart?.total ?? 0
+  const count = cart?.items.length ?? initialCart?.items?.length ?? 0
 
   return (
     <CartDrawer>

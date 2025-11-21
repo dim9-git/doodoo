@@ -1,9 +1,9 @@
-import { http } from "@/shared"
+import { APP_URL, http } from "@/shared"
 
 import { GeoResponseDTO } from "./dto/response"
 
 export async function getAddresses(q: string, limit?: number) {
-  const url = new URL("/api/geosuggest", process.env.NEXT_PUBLIC_APP_URL)
+  const url = new URL("/api/geosuggest", APP_URL)
   url.searchParams.set("q", q)
   url.searchParams.set("type", "address")
   if (limit) {

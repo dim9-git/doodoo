@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { CART_KEY } from "@/entities/cart"
 
-import { createOrder } from "../api/create-order"
+import { createOrder } from "../api/actions/create-order"
 import { CheckoutFormValues } from "./schema"
 
 export function usePlaceOrder() {
@@ -16,11 +16,7 @@ export function usePlaceOrder() {
     isSuccess,
   } = useMutation({
     mutationFn: async (data: CheckoutFormValues) => {
-      const result = await createOrder(data)
-      if (!result) {
-        throw new Error("Failed to place order")
-      }
-      return result
+      return await createOrder(data)
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [CART_KEY] })

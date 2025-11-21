@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
 
+import { getRateLimitIdentifier, moderateRateLimit } from "@/shared/lib"
+
 import {
   findOrCreateCart,
   updateCartTotal,
@@ -9,7 +11,6 @@ import {
   findCartByToken,
 } from "@/entities/cart"
 import { CreateCartItemDTO } from "@/entities/cart-items"
-import { getRateLimitIdentifier, moderateRateLimit } from "@/shared"
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("cartToken")?.value

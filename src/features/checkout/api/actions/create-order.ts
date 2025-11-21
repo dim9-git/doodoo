@@ -5,17 +5,15 @@ import { cookies } from "next/headers"
 import { OrderStatus } from "@prisma/client"
 import { prisma } from "db/prisma"
 
-import { APP_NAME, moderateRateLimit, sendMail } from "@/shared"
+import { APP_NAME } from "@/shared"
+import { moderateRateLimit, sendMail } from "@/shared/lib"
 
-import { CheckoutFormValues } from "../model/schema"
-import { DELIVERY_PRICE } from "../model/constants"
-import { CheckoutResponseDTO } from "./dto/response"
-import { PayOrderTemplate } from "../ui/mail-templates/pay-order-template"
-import { createStripeSession } from "../lib/create-stripe-session"
+import { CheckoutFormValues } from "../../model/schema"
+import { DELIVERY_PRICE } from "../../model/constants"
+import { PayOrderTemplate } from "../../ui/mail-templates/pay-order-template"
+import { createStripeSession } from "../../lib/create-stripe-session"
 
-export const createOrder = async (
-  data: CheckoutFormValues
-): Promise<CheckoutResponseDTO> => {
+export const createOrder = async (data: CheckoutFormValues) => {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get("cartToken")?.value
@@ -126,9 +124,6 @@ export const createOrder = async (
     }
   } catch (error) {
     console.error("[CREATE_ORDER] error:", error)
-    return {
-      paymentUrl: null,
-      error: "Internal server error",
-    }
+    throw error
   }
 }

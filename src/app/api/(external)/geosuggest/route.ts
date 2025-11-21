@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
+
+import { getRateLimitIdentifier, moderateRateLimit } from "@/shared/lib"
+
 import { GeoResponseDTO } from "@/features/geosuggest"
-import { getRateLimitIdentifier, moderateRateLimit } from "@/shared"
 
 const YANDEX_GEO_SUGGEST_URL = "https://suggest-maps.yandex.ru/v1/suggest"
 const YANDEX_API_KEY = process.env.YANDEX_API_KEY

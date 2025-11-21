@@ -9,6 +9,7 @@ import {
   findFilteredProducts,
   GetSearchParams,
 } from "@/features/filter-products"
+import { CheckoutSuccessToast } from "@/features/checkout"
 
 import { TopNavbar } from "@/widgets/top-navbar"
 
@@ -23,36 +24,41 @@ export default async function Home({
   const nonEmptyCategories = categories.filter((cat) => cat.products.length > 0)
 
   return (
-    <div>
-      <Container className="mt-10">
-        <Title text="Все пиццы" size="lg" className="font-extrabold" />
-      </Container>
+    <>
+      <div>
+        <Container className="mt-10">
+          <Title text="Все пиццы" size="lg" className="font-extrabold" />
+        </Container>
 
-      <TopNavbar />
+        <TopNavbar />
 
-      <Container className="mt-10 pb-14">
-        <div className="flex gap-[60px] max-xl:flex-col">
-          {/* Filters */}
-          <div className="xl:max-w-[250px] w-full">
-            <Title text="Фильтры" size="sm" className="font-bold" />
-            <Suspense>
-              <Filters className="max-xl:flex max-xl:justify-between" />
-            </Suspense>
+        <Container className="mt-10 pb-14">
+          <div className="flex gap-[60px] max-xl:flex-col">
+            {/* Filters */}
+            <div className="xl:max-w-[250px] w-full">
+              <Title text="Фильтры" size="sm" className="font-bold" />
+              <Suspense>
+                <Filters className="max-xl:flex max-xl:justify-between" />
+              </Suspense>
+            </div>
+
+            {/* Products */}
+            <div className="flex-1 space-y-16">
+              {nonEmptyCategories.map((category) => (
+                <CatGroupProducts
+                  key={category.id}
+                  title={category.name}
+                  categoryId={category.id}
+                  products={category.products}
+                />
+              ))}
+            </div>
           </div>
+        </Container>
+      </div>
 
-          {/* Products */}
-          <div className="flex-1 space-y-16">
-            {nonEmptyCategories.map((category) => (
-              <CatGroupProducts
-                key={category.id}
-                title={category.name}
-                categoryId={category.id}
-                products={category.products}
-              />
-            ))}
-          </div>
-        </div>
-      </Container>
-    </div>
+      {/* Toast for successfully paid order */}
+      <CheckoutSuccessToast />
+    </>
   )
 }

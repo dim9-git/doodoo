@@ -1,15 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
 import { cookies } from "next/headers"
-import { User } from "lucide-react"
 
-import { Button, Container, cn, APP_NAME, safe } from "@/shared"
+import { Container, cn, APP_NAME, safe } from "@/shared"
 
 import { findCartByToken } from "@/entities/cart"
 
 import { SearchInput } from "@/features/search-products"
 
-import HeaderCartButton from "./header-cart-button"
+import HeaderRight from "./header-right"
 
 interface Props {
   className?: string
@@ -25,7 +24,7 @@ export default async function Header({
   const token = (await cookies()).get("cartToken")?.value
 
   const cart = token
-    ? await safe(() => findCartByToken(token), "[HEADER] fetch cart")
+    ? await safe(() => findCartByToken(token), "Header::findCartByToken")
     : null
 
   return (
@@ -51,14 +50,7 @@ export default async function Header({
         )}
 
         {/* Auth */}
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="flex items-center gap-3">
-            <User className="size-4" size={16} />
-            Войти
-          </Button>
-
-          {hasCart && <HeaderCartButton initialData={cart} />}
-        </div>
+        <HeaderRight hasCart={hasCart} initialCart={cart} />
       </Container>
     </header>
   )
