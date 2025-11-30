@@ -18,10 +18,10 @@ export default function LoginForm({ onClose }: Props) {
     resolver: zodResolver(formLoginSchema),
   })
 
-  const { loginAsync, isPending } = useLogin()
+  const { qLoginAsync, isPending } = useLogin()
 
   const onSubmit = (data: FormLoginValues) => {
-    loginAsync(data, {
+    qLoginAsync(data, {
       onSuccess: () => {
         onClose()
       },

@@ -51,7 +51,11 @@ export {
 } from "./ui/sh/command"
 export { Container } from "./ui/container"
 export { Title } from "./ui/title"
-export { AutocompleteInput } from "./ui/autocomplete-input"
+export {
+  AutocompleteInput,
+  type AutocompleteItem,
+  type AutocompleteProps,
+} from "./ui/autocomplete-input"
 export { default as RequiredSymbol } from "./ui/required-symbol"
 export { default as WhiteBlock } from "./ui/white-block"
 export { default as ErrorMessage } from "./ui/error-message"

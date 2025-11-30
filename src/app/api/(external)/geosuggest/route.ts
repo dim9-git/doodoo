@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import { getRateLimitIdentifier, moderateRateLimit } from "@/shared/lib"
+import { getRateLimitIdentifier, moderateRateLimit } from "@/shared/lib/server"
 
 import { GeoResponseDTO } from "@/features/geosuggest"
 
