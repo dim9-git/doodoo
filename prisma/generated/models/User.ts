@@ -577,6 +577,11 @@ export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
 export type UserCreateNestedOneWithoutSessionInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSessionInput, Prisma.UserUncheckedCreateWithoutSessionInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionInput
@@ -651,12 +656,10 @@ export type UserCreateNestedOneWithoutVerificationCodeInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutVerificationCodeNestedInput = {
+export type UserUpdateOneRequiredWithoutVerificationCodeNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutVerificationCodeInput, Prisma.UserUncheckedCreateWithoutVerificationCodeInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutVerificationCodeInput
   upsert?: Prisma.UserUpsertWithoutVerificationCodeInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVerificationCodeInput, Prisma.UserUpdateWithoutVerificationCodeInput>, Prisma.UserUncheckedUpdateWithoutVerificationCodeInput>
 }

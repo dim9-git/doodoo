@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const ingredients = await prisma.ingredient.findMany()
 
-    return NextResponse.json({ data: ingredients })
+    return NextResponse.json(ingredients)
   } catch (error) {
     console.error("[INGREDIENTS_GET] error:", error)
     return NextResponse.json(

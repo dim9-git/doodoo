@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 
 import { generateState, generateCodeVerifier } from "arctic"
 
-import { google } from "@/shared/lib"
+import { google } from "@/shared/lib/server"
 
 export async function GET(): Promise<Response> {
   const state = generateState()

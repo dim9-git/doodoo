@@ -1,7 +1,7 @@
 "use server"
 
-import { deleteSession } from "@/entities/session"
-import { deleteSessionTokenCookie, getSessionFromCookie } from "../cookie"
+import { deleteSession } from "@/entities/sessions"
+import { deleteSessionTokenCookie, getSessionFromCookie } from "../cookies"
 
 export const actionLogout = async () => {
   try {

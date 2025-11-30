@@ -31,7 +31,7 @@ interface Props {
 export default function CartDrawer({ children }: Props) {
   const { cart, setIsUpdating, isUpdating, isAdding } = useCart()
 
-  const totalAmount = cart?.total ? cart.total : 0
+  const totalAmount = cart?.total ?? 0
 
   const isDisabled = isUpdating || isAdding
 

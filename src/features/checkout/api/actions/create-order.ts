@@ -6,12 +6,12 @@ import { OrderStatus } from "db/generated/client"
 import { prisma } from "db/prisma"
 
 import { APP_NAME } from "@/shared"
-import { moderateRateLimit, sendEmail } from "@/shared/lib"
+import { moderateRateLimit, sendEmail } from "@/shared/lib/server"
 
+import { createStripeSession } from "../../lib/create-stripe-session"
 import { CheckoutFormValues } from "../../model/schema"
 import { DELIVERY_PRICE } from "../../model/constants"
 import { PayOrderTemplate } from "../../ui/mail-templates/pay-order-template"
-import { createStripeSession } from "../../lib/create-stripe-session"
 
 export const createOrder = async (data: CheckoutFormValues) => {
   try {

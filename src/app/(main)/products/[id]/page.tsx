@@ -2,7 +2,8 @@ import { notFound } from "next/navigation"
 
 import { Container } from "@/shared"
 
-import { getProductDetails, RelatedProducts } from "@/entities/products"
+import { RelatedProducts } from "@/entities/products"
+import { findProductDetails } from "@/entities/products/server"
 
 import { ProductSwitchForm } from "@/widgets/product-switch-form"
 
@@ -13,7 +14,7 @@ export default async function ProductPage({
 }) {
   const { id } = await params
 
-  const product = await getProductDetails(Number(id))
+  const product = await findProductDetails(Number(id))
 
   if (!product) return notFound()
 

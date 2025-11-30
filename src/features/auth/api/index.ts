@@ -1,6 +1,6 @@
-export { createSessionToken, validateSession } from "./session"
+export { createSessionToken, validateSession } from "./sessions"
 export {
   getSessionFromCookie,
   setSessionTokenCookie,
   deleteSessionTokenCookie,
-} from "./cookie"
+} from "./cookies"

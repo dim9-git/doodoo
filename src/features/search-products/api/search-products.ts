@@ -1,11 +1,9 @@
 import { Product } from "db/generated/client"
 
+import { Api } from "@/shared"
+
 export const searchProducts = async (query: string): Promise<Product[]> => {
-  const res = await fetch("/api/products/search?query=" + query)
+  const res = await Api.get<Product[]>(`/api/products/search?query=${query}`)
 
-  if (!res.ok) {
-    throw new Error("Ошибка при поиске продуктов")
-  }
-
-  return await res.json()
+  return res.data
 }

@@ -181,7 +181,7 @@ export type VerificationCodeGroupByOutputType = {
   id: number
   createdAt: Date
   code: string
-  userId: number | null
+  userId: number
   _count: VerificationCodeCountAggregateOutputType | null
   _avg: VerificationCodeAvgAggregateOutputType | null
   _sum: VerificationCodeSumAggregateOutputType | null
@@ -211,15 +211,15 @@ export type VerificationCodeWhereInput = {
   id?: Prisma.IntFilter<"VerificationCode"> | number
   createdAt?: Prisma.DateTimeFilter<"VerificationCode"> | Date | string
   code?: Prisma.StringFilter<"VerificationCode"> | string
-  userId?: Prisma.IntNullableFilter<"VerificationCode"> | number | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  userId?: Prisma.IntFilter<"VerificationCode"> | number
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type VerificationCodeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -232,14 +232,14 @@ export type VerificationCodeWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.VerificationCodeWhereInput | Prisma.VerificationCodeWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"VerificationCode"> | Date | string
   code?: Prisma.StringFilter<"VerificationCode"> | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId" | "code_userId">
 
 export type VerificationCodeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
   _count?: Prisma.VerificationCodeCountOrderByAggregateInput
   _avg?: Prisma.VerificationCodeAvgOrderByAggregateInput
   _max?: Prisma.VerificationCodeMaxOrderByAggregateInput
@@ -254,40 +254,40 @@ export type VerificationCodeScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"VerificationCode"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"VerificationCode"> | Date | string
   code?: Prisma.StringWithAggregatesFilter<"VerificationCode"> | string
-  userId?: Prisma.IntNullableWithAggregatesFilter<"VerificationCode"> | number | null
+  userId?: Prisma.IntWithAggregatesFilter<"VerificationCode"> | number
 }
 
 export type VerificationCodeCreateInput = {
   createdAt?: Date | string
   code: string
-  user?: Prisma.UserCreateNestedOneWithoutVerificationCodeInput
+  user: Prisma.UserCreateNestedOneWithoutVerificationCodeInput
 }
 
 export type VerificationCodeUncheckedCreateInput = {
   id?: number
   createdAt?: Date | string
   code: string
-  userId?: number | null
+  userId: number
 }
 
 export type VerificationCodeUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  user?: Prisma.UserUpdateOneWithoutVerificationCodeNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutVerificationCodeNestedInput
 }
 
 export type VerificationCodeUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type VerificationCodeCreateManyInput = {
   id?: number
   createdAt?: Date | string
   code: string
-  userId?: number | null
+  userId: number
 }
 
 export type VerificationCodeUpdateManyMutationInput = {
@@ -299,7 +299,7 @@ export type VerificationCodeUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type VerificationCodeNullableScalarRelationFilter = {
@@ -420,7 +420,7 @@ export type VerificationCodeSelect<ExtArgs extends runtime.Types.Extensions.Inte
   createdAt?: boolean
   code?: boolean
   userId?: boolean
-  user?: boolean | Prisma.VerificationCode$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["verificationCode"]>
 
 export type VerificationCodeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -428,7 +428,7 @@ export type VerificationCodeSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   createdAt?: boolean
   code?: boolean
   userId?: boolean
-  user?: boolean | Prisma.VerificationCode$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["verificationCode"]>
 
 export type VerificationCodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -436,7 +436,7 @@ export type VerificationCodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   createdAt?: boolean
   code?: boolean
   userId?: boolean
-  user?: boolean | Prisma.VerificationCode$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["verificationCode"]>
 
 export type VerificationCodeSelectScalar = {
@@ -448,25 +448,25 @@ export type VerificationCodeSelectScalar = {
 
 export type VerificationCodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "code" | "userId", ExtArgs["result"]["verificationCode"]>
 export type VerificationCodeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.VerificationCode$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type VerificationCodeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.VerificationCode$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type VerificationCodeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.VerificationCode$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $VerificationCodePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "VerificationCode"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     createdAt: Date
     code: string
-    userId: number | null
+    userId: number
   }, ExtArgs["result"]["verificationCode"]>
   composites: {}
 }
@@ -861,7 +861,7 @@ readonly fields: VerificationCodeFieldRefs;
  */
 export interface Prisma__VerificationCodeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.VerificationCode$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VerificationCode$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1288,25 +1288,6 @@ export type VerificationCodeDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many VerificationCodes to delete.
    */
   limit?: number
-}
-
-/**
- * VerificationCode.user
- */
-export type VerificationCode$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

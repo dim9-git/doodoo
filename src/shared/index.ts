@@ -1,3 +1,14 @@
+// Lib
+export { cn, absoluteUrl } from "./lib/utils"
+export { logger } from "./lib/logger"
+export { Api } from "./lib/http"
+export { safe } from "./lib/safe"
+
+// Model
+export { APP_NAME, APP_URL } from "./model/constants"
+export { useDebouncedValue } from "./model/use-debounced-value"
+
+// UI
 export { Button } from "./ui/sh/button"
 export { Input } from "./ui/sh/input"
 export { RangeSlider } from "./ui/sh/range-slider"
@@ -38,7 +49,6 @@ export {
   CommandShortcut,
   CommandSeparator,
 } from "./ui/sh/command"
-
 export { Container } from "./ui/container"
 export { Title } from "./ui/title"
 export { AutocompleteInput } from "./ui/autocomplete-input"
@@ -49,11 +59,3 @@ export { default as FormInput } from "./ui/form/form-input"
 export { default as FormTextarea } from "./ui/form/form-textarea"
 export { default as FormPhoneInput } from "./ui/form/form-phone-input"
 export { default as QCProvider } from "./ui/qc-provider"
-
-export { APP_NAME, APP_URL } from "./model/constants"
-export { useDebouncedValue } from "./model/use-debounced-value"
-
-export { cn, absoluteUrl } from "./lib/utils"
-export { logger } from "./lib/logger"
-export { http } from "./lib/http"
-export { safe } from "./lib/safe"

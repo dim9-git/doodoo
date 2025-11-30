@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
-import { CartResponseDTO, getCart, mapCartToState } from "@/entities/cart"
+import { CartResponseDTO, mapCartToState, getCart } from "@/entities/cart"
 
 import { useCartStore } from "./use-cart-store"
 

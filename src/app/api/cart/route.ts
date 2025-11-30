@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "db/prisma"
 
-import { getRateLimitIdentifier, moderateRateLimit } from "@/shared/lib"
+import { getRateLimitIdentifier, moderateRateLimit } from "@/shared/lib/server"
 
+import { matchCartItem } from "@/entities/cart"
 import {
   findOrCreateCart,
   updateCartTotal,
-  withItems,
-  findCartItem,
   findCartByToken,
-} from "@/entities/cart"
+  withItems,
+} from "@/entities/cart/server"
 import { CreateCartItemDTO } from "@/entities/cart-items"
 
 export async function GET(req: NextRequest) {
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     const data = (await req.json()) as CreateCartItemDTO
     const userCart = await findOrCreateCart(token)
 
-    const cartItem = findCartItem(
+    const cartItem = matchCartItem(
       userCart,
       data.productItemId,
       data.ingredientsIds

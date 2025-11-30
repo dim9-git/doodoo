@@ -3,8 +3,8 @@ import { PrismaClient } from "db/generated/client"
 import {
   createSession,
   deleteSession,
-  getSessionWithUser,
-} from "@/entities/session"
+  findSessionWithUser,
+} from "@/entities/sessions"
 
 import {
   constantTimeEqual,
@@ -57,7 +57,7 @@ export const validateSession = async (token: string, pc?: PrismaClient) => {
   const sessionId = tokenParts[0]
   const sessionSecret = tokenParts[1]
 
-  const session = await getSessionWithUser(sessionId, pc)
+  const session = await findSessionWithUser(sessionId, pc)
   if (session === null) {
     return null
   }

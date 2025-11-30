@@ -1,6 +1,6 @@
 import { prisma } from "db/prisma"
 
-export const getCategoriesShort = async () => {
+export const findCategoriesShort = async () => {
   return await prisma.category.findMany({
     select: {
       id: true,
@@ -9,7 +9,7 @@ export const getCategoriesShort = async () => {
   })
 }
 
-export const getCategories = async () => {
+export const findCategories = async () => {
   return await prisma.category.findMany({
     include: {
       products: {

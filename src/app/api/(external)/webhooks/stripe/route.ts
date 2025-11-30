@@ -5,7 +5,7 @@ import { OrderStatus } from "db/generated/client"
 import Stripe from "stripe"
 
 import { APP_NAME } from "@/shared"
-import { stripe, sendEmail } from "@/shared/lib"
+import { stripe, sendEmail } from "@/shared/lib/server"
 
 import { CartItemResponseDTO } from "@/entities/cart-items"
 

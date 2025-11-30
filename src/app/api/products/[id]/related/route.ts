@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server"
 
-import {
-  getRelatedProducts,
-  RelatedProductsResponseDTO,
-} from "@/entities/products"
+import { findRelatedProducts } from "@/entities/products/server"
 
 export async function GET(
   req: Request,
@@ -20,11 +17,9 @@ export async function GET(
   }
 
   try {
-    const relatedProducts = await getRelatedProducts(id)
+    const relatedProducts = await findRelatedProducts(id)
 
-    return NextResponse.json({
-      data: relatedProducts,
-    } satisfies RelatedProductsResponseDTO)
+    return NextResponse.json(relatedProducts)
   } catch (error) {
     console.error("[PRODUCTS_${ID}_RELATED_GET] error:", error)
     return NextResponse.json(

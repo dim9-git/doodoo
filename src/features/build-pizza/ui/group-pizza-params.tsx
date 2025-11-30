@@ -35,7 +35,7 @@ export default function GroupPizzaParams({
           className={cn(
             "h-[30px] flex flex-1 items-center justify-center cursor-pointer px-5 rounded-3xl text-sm transition-all duration-400",
             {
-              "bg-white shadow": item.value === value,
+              "bg-white shadow-sm": item.value === value,
               "text-gray-500 opacity-50 pointer-events-none": item.disabled,
             }
           )}

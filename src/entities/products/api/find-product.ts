@@ -2,7 +2,7 @@ import { prisma } from "db/prisma"
 
 import { ProductResponseDTO } from "./dto/response"
 
-export const getProduct = async (id: number) => {
+export const findProductById = async (id: number) => {
   const product = await prisma.product.findUnique({
     where: { id },
   })
@@ -10,7 +10,7 @@ export const getProduct = async (id: number) => {
   return product
 }
 
-export const getProductDetails = async (
+export const findProductDetails = async (
   id: number
 ): Promise<ProductResponseDTO | null> => {
   const product = await prisma.product.findUnique({

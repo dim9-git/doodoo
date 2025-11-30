@@ -2,7 +2,7 @@
 
 import { hashSync } from "bcrypt"
 
-import { getUserById, updateUser } from "@/entities/user"
+import { findUser, updateUser } from "@/entities/users"
 
 import { getSessionFromCookie } from "@/features/auth/api"
 
@@ -15,7 +15,7 @@ export const actionUpdateUser = async (payload: FormProfileValues) => {
     throw new Error("Session not found")
   }
 
-  const user = await getUserById(session.userId)
+  const user = await findUser(session.userId)
 
   if (!user) {
     throw new Error("User not found")

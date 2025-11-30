@@ -1,10 +1,9 @@
-import { http } from "@/shared"
-import { Ingredient } from "db/generated/client"
+import { Ingredient } from "db/generated/browser"
 
-export const INGREDIENTS_QUERY_KEY = ["ingredients"] as const
+import { Api } from "@/shared"
 
 export async function getIngredients(): Promise<Ingredient[]> {
-  const res = await http.get<{ data: Ingredient[] }>("/api/ingredients")
+  const res = await Api.get<Ingredient[]>("/api/ingredients")
 
   return res.data
 }

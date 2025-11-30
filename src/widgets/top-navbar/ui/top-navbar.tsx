@@ -1,6 +1,6 @@
 import { Container, cn } from "@/shared"
 
-import { getCategoriesShort } from "@/entities/product-categories"
+import { findCategoriesShort } from "@/entities/product-categories/server"
 
 import { Categories } from "./categories"
 import SortPopup from "./sort-popup"
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default async function TopNavbar({ className }: Props) {
-  const categories = await getCategoriesShort()
+  const categories = await findCategoriesShort()
   return (
     <div
       className={cn(

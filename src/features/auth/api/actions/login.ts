@@ -4,9 +4,8 @@ import { compare } from "bcrypt"
 import { prisma } from "db/prisma"
 
 import { FormLoginValues } from "../../model/schemas"
-import { setSessionTokenCookie } from "../cookie"
-import { createSessionToken } from "../session"
-
+import { setSessionTokenCookie } from "../cookies"
+import { createSessionToken } from "../sessions"
 
 export type LoginUserDTO = FormLoginValues
 

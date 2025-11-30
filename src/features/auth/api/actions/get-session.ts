@@ -1,6 +1,6 @@
 "use server"
 
-import { getSessionFromCookie } from "../cookie"
+import { getSessionFromCookie } from "../cookies"
 
 export const actionGetSession = async () => {
   return await getSessionFromCookie()

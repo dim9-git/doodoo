@@ -2,7 +2,7 @@ import { CartItemResponseDTO } from "@/entities/cart-items"
 
 import { CartResponseDTO } from "../api/dto/response"
 
-export const findCartItem = (
+export const matchCartItem = (
   cart: CartResponseDTO,
   productItemId: number,
   ingredientsIds?: number[]

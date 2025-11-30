@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 
 import { Container, safe } from "@/shared"
 
-import { getUserById } from "@/entities/user"
+import { findUser } from "@/entities/users"
 
 import { getSessionFromCookie } from "@/features/auth/api"
 
@@ -17,7 +17,7 @@ export default async function ProfilePage() {
 
   const userId = session.userId
 
-  const user = await safe(() => getUserById(userId), "ProfilePage::getUserById")
+  const user = await safe(() => findUser(userId), "ProfilePage::findUser")
 
   if (!user) {
     return redirect("/")

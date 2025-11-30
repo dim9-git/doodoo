@@ -5,7 +5,7 @@ import {
   updateCartTotal,
   updateCartTotalByToken,
   withItems,
-} from "@/entities/cart"
+} from "@/entities/cart/server"
 import { UpdateCartItemDTO } from "@/entities/cart-items"
 
 export async function PATCH(

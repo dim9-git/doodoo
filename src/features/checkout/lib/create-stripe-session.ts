@@ -1,4 +1,4 @@
-import { stripe } from "@/shared/lib"
+import { stripe } from "@/shared/lib/server"
 
 import { CANCEL_URL, SUCCESS_URL } from "../model/constants"
 import { StripeSessionCreateMetadataDTO } from "../api/dto/response"

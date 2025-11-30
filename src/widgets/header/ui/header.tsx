@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 
 import { Container, cn, APP_NAME, safe } from "@/shared"
 
-import { findCartByToken } from "@/entities/cart"
+import { findCartByToken } from "@/entities/cart/server"
 
 import { SearchInput } from "@/features/search-products"
 

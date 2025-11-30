@@ -4,7 +4,3 @@ export type ProductResponseDTO = Product & {
   ingredients: Ingredient[]
   items: ProductItem[]
 }
-
-export type RelatedProductsResponseDTO = {
-  data: ProductResponseDTO[]
-}

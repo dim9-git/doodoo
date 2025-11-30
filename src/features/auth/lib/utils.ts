@@ -13,7 +13,9 @@ export const generateSecureRandomString = (): string => {
   return id
 }
 
-export const hashSecret = async (secret: string): Promise<Uint8Array> => {
+export const hashSecret = async (
+  secret: string
+): Promise<Uint8Array<ArrayBuffer>> => {
   const secretBytes = new TextEncoder().encode(secret)
   const secretHashBuffer = await crypto.subtle.digest("SHA-256", secretBytes)
   return new Uint8Array(secretHashBuffer)

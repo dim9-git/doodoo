@@ -2,14 +2,16 @@ import { Suspense } from "react"
 
 import { Title, Container } from "@/shared"
 
+import { Stories } from "@/entities/stories"
 import { CatGroupProducts } from "@/entities/product-categories"
 
+import { Filters } from "@/features/filter-products"
 import {
-  Filters,
   findFilteredProducts,
-  GetSearchParams,
-} from "@/features/filter-products"
+  type GetSearchParams,
+} from "@/features/filter-products/server"
 import { CheckoutSuccessToast } from "@/features/checkout"
+import { VerifySuccessToast } from "@/features/auth"
 
 import { TopNavbar } from "@/widgets/top-navbar"
 
@@ -31,6 +33,8 @@ export default async function Home({
         </Container>
 
         <TopNavbar />
+
+        <Stories />
 
         <Container className="mt-10 pb-14">
           <div className="flex gap-[60px] max-xl:flex-col">
@@ -57,8 +61,8 @@ export default async function Home({
         </Container>
       </div>
 
-      {/* Toast for successfully paid order */}
       <CheckoutSuccessToast />
+      <VerifySuccessToast />
     </>
   )
 }

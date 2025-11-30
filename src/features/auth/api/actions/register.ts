@@ -5,7 +5,7 @@ import { hashSync } from "bcrypt"
 import { prisma } from "db/prisma"
 
 import { APP_NAME } from "@/shared"
-import { sendEmail } from "@/shared/lib"
+import { sendEmail } from "@/shared/lib/server"
 
 import UserVerification from "../../ui/mail-templates/user-verification"
 

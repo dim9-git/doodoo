@@ -160,8 +160,8 @@ model VerificationCode {
 
   code String
 
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?  @unique
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
 
   @@unique([code, userId])
 }

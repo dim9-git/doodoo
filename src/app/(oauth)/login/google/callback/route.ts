@@ -2,13 +2,13 @@ import { cookies } from "next/headers"
 import { decodeIdToken, type OAuth2Tokens } from "arctic"
 import { ObjectParser } from "@pilcrowjs/object-parser"
 
-import { google } from "@/shared/lib"
+import { google } from "@/shared/lib/server"
 
 import {
-  getUserFromGoogleId,
+  findGoogleUser,
   createUserWithGoogleId,
   UserProvider,
-} from "@/entities/user"
+} from "@/entities/users"
 
 import { createSessionToken, setSessionTokenCookie } from "@/features/auth/api"
 
@@ -53,7 +53,7 @@ export async function GET(request: Request): Promise<Response> {
   const picture = claimsParser.getString("picture")
   const email = claimsParser.getString("email")
 
-  const existingUser = await getUserFromGoogleId(googleId)
+  const existingUser = await findGoogleUser(googleId)
   if (existingUser !== null) {
     const { token, expiresAt } = await createSessionToken(existingUser.id)
     setSessionTokenCookie(token, expiresAt)

@@ -1,4 +1,4 @@
-import { APP_URL, http } from "@/shared"
+import { APP_URL, Api } from "@/shared"
 
 import { GeoResponseDTO } from "./dto/response"
 
@@ -10,7 +10,7 @@ export async function getAddresses(q: string, limit?: number) {
     url.searchParams.set("limit", limit.toString())
   }
 
-  const res = await http.get<GeoResponseDTO>(url.toString())
+  const res = await Api.get<GeoResponseDTO>(url.toString())
 
-  return res.data.results
+  return res.data.data.results
 }

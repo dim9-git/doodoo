@@ -6,7 +6,7 @@ import { toast } from "sonner"
 
 import { Button, FormInput } from "@/shared"
 
-import { User } from "@/entities/user"
+import { User } from "@/entities/users"
 
 import { useLogout } from "@/features/auth"
 

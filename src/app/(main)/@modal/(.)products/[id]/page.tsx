@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 
-import { getProductDetails } from "@/entities/products"
+import { findProductDetails } from "@/entities/products/server"
 
 import { ChooseProductModal } from "@/widgets/choose-product-modal"
 
@@ -10,7 +10,7 @@ export default async function ProductModalPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const product = await getProductDetails(Number(id))
+  const product = await findProductDetails(Number(id))
 
   if (!product) return notFound()
 
