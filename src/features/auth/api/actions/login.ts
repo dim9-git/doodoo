@@ -7,6 +7,7 @@ import { FormLoginValues } from "../../model/schemas"
 import { setSessionTokenCookie } from "../cookie"
 import { createSessionToken } from "../session"
 
+
 export type LoginUserDTO = FormLoginValues
 
 export const actionLogin = async (payload: LoginUserDTO) => {
@@ -19,6 +20,10 @@ export const actionLogin = async (payload: LoginUserDTO) => {
 
     if (!user) {
       throw new Error("Пользователь не найден")
+    }
+
+    if (user.provider) {
+      throw new Error("Неверный пароль")
     }
 
     const isPasswordValid = await compare(password, user.password)

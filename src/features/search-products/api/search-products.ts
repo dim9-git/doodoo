@@ -1,4 +1,4 @@
-import { Product } from "@prisma/client"
+import { Product } from "db/generated/client"
 
 export const searchProducts = async (query: string): Promise<Product[]> => {
   const res = await fetch("/api/products/search?query=" + query)

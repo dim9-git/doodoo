@@ -48,6 +48,7 @@ export { default as ErrorMessage } from "./ui/error-message"
 export { default as FormInput } from "./ui/form/form-input"
 export { default as FormTextarea } from "./ui/form/form-textarea"
 export { default as FormPhoneInput } from "./ui/form/form-phone-input"
+export { default as QCProvider } from "./ui/qc-provider"
 
 export { APP_NAME, APP_URL } from "./model/constants"
 export { useDebouncedValue } from "./model/use-debounced-value"

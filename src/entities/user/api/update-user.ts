@@ -1,5 +1,5 @@
 import { prisma } from "db/prisma"
-import { Prisma } from "@prisma/client"
+import { Prisma } from "db/generated/client"
 
 export const updateUser = async (
   userId: number,

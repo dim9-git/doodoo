@@ -1,4 +1,4 @@
-import { Ingredient, ProductItem } from "@prisma/client"
+import { Ingredient, ProductItem } from "db/generated/client"
 import { PizzaSize, PizzaType } from "@/entities/products"
 
 interface ICalcPizzaTotalPrice {

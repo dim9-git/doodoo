@@ -1,5 +1,5 @@
 import { http } from "@/shared"
-import { Ingredient } from "@prisma/client"
+import { Ingredient } from "db/generated/client"
 
 export const INGREDIENTS_QUERY_KEY = ["ingredients"] as const
 

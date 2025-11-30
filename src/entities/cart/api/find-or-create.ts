@@ -1,5 +1,5 @@
 import { prisma, TransactionClient } from "db/prisma"
-import { withItems } from "../model/cart.relations"
+import { withItems } from "../model/relations"
 
 export async function findOrCreateCart(
   token: string,

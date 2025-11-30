@@ -2,11 +2,11 @@
 
 import { randomUUID } from "node:crypto"
 import { cookies } from "next/headers"
-import { OrderStatus } from "@prisma/client"
+import { OrderStatus } from "db/generated/client"
 import { prisma } from "db/prisma"
 
 import { APP_NAME } from "@/shared"
-import { moderateRateLimit, sendMail } from "@/shared/lib"
+import { moderateRateLimit, sendEmail } from "@/shared/lib"
 
 import { CheckoutFormValues } from "../../model/schema"
 import { DELIVERY_PRICE } from "../../model/constants"
@@ -105,7 +105,7 @@ export const createOrder = async (data: CheckoutFormValues) => {
 
     const paymentUrl = stripeSession.url
 
-    const { error: sendMailError } = await sendMail(
+    const { error: sendEmailError } = await sendEmail(
       data.email,
       `${APP_NAME} - Оплатите заказ #${newOrder.id}`,
       PayOrderTemplate({
@@ -115,15 +115,15 @@ export const createOrder = async (data: CheckoutFormValues) => {
       })
     )
 
-    if (sendMailError) {
-      throw new Error("Failed to send email")
+    if (sendEmailError) {
+      throw new Error(`Failed to send email: ${sendEmailError.message}`)
     }
 
     return {
       paymentUrl,
     }
   } catch (error) {
-    console.error("[CREATE_ORDER] error:", error)
+    console.error("[CREATE_ORDER] ", error)
     throw error
   }
 }

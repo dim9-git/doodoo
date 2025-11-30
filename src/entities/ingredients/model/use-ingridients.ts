@@ -1,4 +1,4 @@
-import { Ingredient } from "@prisma/client"
+import { Ingredient } from "db/generated/client"
 import { useQuery } from "@tanstack/react-query"
 import { useSet } from "react-use"
 

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { useSet } from "react-use"
-import { ProductItem } from "@prisma/client"
+import { ProductItem } from "db/generated/client"
 
 import { getEnabledPizzaSizes, PizzaSize, PizzaType } from "@/entities/products"
 

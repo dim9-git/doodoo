@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client"
+import { Prisma, PrismaClient } from "db/generated/client"
 import { prisma as prismaInstance } from "db/prisma"
 
 export const createSession = async (

@@ -78,6 +78,11 @@ html {
   }
 }
 
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 .scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -129,4 +134,16 @@ html {
   animation: shimmer 2s infinite;
   pointer-events: none;
   filter: blur(1px);
+}
+
+#nprogress .bar {
+  @apply bg-primary !important;
+}
+
+#nprogress .peg {
+  @apply shadow-md shadow-primary !important;
+}
+
+#nprogress .spinner-icon {
+  @apply border-t-primary border-l-primary !important;
 }

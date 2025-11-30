@@ -38,7 +38,7 @@ export default async function Home({
             <div className="xl:max-w-[250px] w-full">
               <Title text="Фильтры" size="sm" className="font-bold" />
               <Suspense>
-                <Filters className="max-xl:flex max-xl:justify-between" />
+                <Filters className="flex xl:flex-col lg:justify-between max-lg:flex-wrap max-lg:gap-x-16 max-lg:gap-y-5" />
               </Suspense>
             </div>
 

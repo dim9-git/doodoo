@@ -1,11 +1,11 @@
 import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { prisma } from "db/prisma"
-import { OrderStatus } from "@prisma/client"
+import { OrderStatus } from "db/generated/client"
 import Stripe from "stripe"
 
 import { APP_NAME } from "@/shared"
-import { stripe, sendMail } from "@/shared/lib"
+import { stripe, sendEmail } from "@/shared/lib"
 
 import { CartItemResponseDTO } from "@/entities/cart-items"
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         },
       })
 
-      const { error: sendMailError } = await sendMail(
+      const { error: sendEmailError } = await sendEmail(
         order.email,
         `${APP_NAME} - Заказ #${orderId}`,
         OrderSuccessTemplate({
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
         })
       )
 
-      if (sendMailError) {
+      if (sendEmailError) {
         throw new Error("Failed to send email")
       }
 

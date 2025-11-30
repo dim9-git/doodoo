@@ -1,3 +1,3 @@
-import { User as PrismaUser } from "@prisma/client"
+import { User as PrismaUser } from "db/generated/client"
 
 export type User = PrismaUser

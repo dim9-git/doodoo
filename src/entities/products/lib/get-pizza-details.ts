@@ -1,4 +1,4 @@
-import { Ingredient, ProductItem } from "@prisma/client"
+import { Ingredient, ProductItem } from "db/generated/client"
 
 import { mapPizzaType, PizzaSize, PizzaType } from "@/entities/products"
 

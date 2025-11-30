@@ -50,7 +50,7 @@ export async function GET(request: Request): Promise<Response> {
 
   const googleId = claimsParser.getString("sub")
   const name = claimsParser.getString("name")
-  // const picture = claimsParser.getString("picture")
+  const picture = claimsParser.getString("picture")
   const email = claimsParser.getString("email")
 
   const existingUser = await getUserFromGoogleId(googleId)
@@ -68,6 +68,7 @@ export async function GET(request: Request): Promise<Response> {
   const user = await createUserWithGoogleId(
     email,
     name,
+    picture,
     UserProvider.GOOGLE,
     googleId
   )

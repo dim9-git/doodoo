@@ -1,8 +1,9 @@
 import { Container, cn } from "@/shared"
 
+import { getCategoriesShort } from "@/entities/product-categories"
+
 import { Categories } from "./categories"
 import SortPopup from "./sort-popup"
-import { getCategoriesShort } from "@/entities/product-categories"
 
 interface Props {
   className?: string
@@ -17,8 +18,11 @@ export default async function TopNavbar({ className }: Props) {
         className
       )}
     >
-      <Container className="flex items-center justify-between ">
-        <Categories categories={categories} />
+      <Container className="flex items-center justify-between lg:flex-col xl:flex-row max-lg:flex-col max-xl:gap-2">
+        <Categories
+          categories={categories}
+          className="whitespace-nowrap max-lg:w-full max-lg:overflow-x-auto scrollbar-none"
+        />
         <SortPopup />
       </Container>
     </div>

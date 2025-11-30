@@ -27,7 +27,7 @@ export default function ChooseProductModal({ product, className }: Props) {
     <Dialog open={true} onOpenChange={() => router.back()}>
       <DialogContent
         className={cn(
-          "w-[1060px] max-w-[1060px] min-h-[500px] p-0 bg-white overflow-hidden",
+          "lg:w-[1060px] lg:max-w-[1060px] lg:min-h-[500px] overflow-hidden p-0 bg-white w-full",
           className
         )}
       >

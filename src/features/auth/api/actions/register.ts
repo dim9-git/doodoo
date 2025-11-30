@@ -1,11 +1,11 @@
 "use server"
 
-import { Prisma } from "@prisma/client"
+import { Prisma } from "db/generated/client"
 import { hashSync } from "bcrypt"
 import { prisma } from "db/prisma"
 
 import { APP_NAME } from "@/shared"
-import { sendMail } from "@/shared/lib"
+import { sendEmail } from "@/shared/lib"
 
 import UserVerification from "../../ui/mail-templates/user-verification"
 
@@ -46,7 +46,7 @@ export const actionRegister = async (payload: RegisterUserDTO) => {
       },
     })
 
-    await sendMail(
+    await sendEmail(
       createdUser.email,
       `${APP_NAME} / 📝 Подтверждение регистрации`,
       UserVerification({

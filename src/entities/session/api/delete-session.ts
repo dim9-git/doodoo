@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "db/generated/client"
 import { prisma as prismaInstance } from "db/prisma"
 
 export const deleteSession = async (

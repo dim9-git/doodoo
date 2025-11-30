@@ -6,4 +6,4 @@ export {
   moderateRateLimit,
   getRateLimitIdentifier,
 } from "./rate-limit.server"
-export { sendMail } from "./send-mail.server"
+export { sendEmail } from "./send-mail.server"

@@ -21,7 +21,7 @@ export default function RelatedProducts({ id }: Props) {
     <div className="mt-8">
       <Title text="Похожие товары" size="md" className="font-extrabold" />
 
-      <div className="grid grid-cols-3 gap-12 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-4">
         {relatedProducts?.map((product) => (
           <ProductCard
             key={product.id}

@@ -17,17 +17,17 @@ export default function ProductCard({ className, product }: Props) {
   return (
     <div className={cn(className, "group flex flex-col max-h-full")}>
       <Link href={`/products/${product.id}`} scroll={false}>
-        <div className="flex justify-center p-6 bg-secondary rounded-lg max-h-[260px] w-full group-hover:shadow-md transition-all">
+        <div className="flex justify-center p-4 lg:p-6 bg-secondary rounded-lg max-h-[260px] w-full group-hover:shadow-md transition-all">
           {product.coverUrl ? (
             <Image
               src={product.coverUrl}
               alt={product.name}
               width={215}
               height={215}
-              className="w-[215px] h-[215px]"
+              className="size-[215px] max-lg:size-[175px] object-contain"
             />
           ) : (
-            <div className="w-[215px] h-[215px] bg-gray-200 rounded-lg" />
+            <div className="size-[215px] max-lg:size-[175px] bg-gray-200 rounded-lg" />
           )}
         </div>
       </Link>

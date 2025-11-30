@@ -2,7 +2,7 @@ import { prisma, TransactionClient } from "db/prisma"
 
 import { calcCartItemTotalPrice } from "@/entities/cart-items"
 
-import { withItems } from "../model/cart.relations"
+import { withItems } from "../model/relations"
 import { CartResponseDTO } from "./dto/response"
 import { findCartByToken } from "./find-by-token"
 

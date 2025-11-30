@@ -4,7 +4,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY!
 
 export const resend = new Resend(RESEND_API_KEY)
 
-export const sendMail = async (
+export const sendEmail = async (
   to: string,
   subject: string,
   template: React.ReactNode

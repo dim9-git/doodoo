@@ -1,17 +1,25 @@
 import { cache } from "react"
 import { cookies } from "next/headers"
-import { Session } from "@prisma/client"
 import { prisma } from "db/prisma"
+
+import { SessionWithUser } from "@/entities/session"
 
 import { validateSession } from "./session"
 
-export const getSessionFromCookie = cache(async (): Promise<Session | null> => {
+type SessionWithoutSecretHash = Omit<SessionWithUser, "secretHash">
+
+export const getSessionFromCookie = cache(async (): Promise<SessionWithoutSecretHash | null> => {
   const cookieStore = await cookies()
   const token = cookieStore.get("session")?.value ?? null
 
   if (token === null) return null
 
-  return validateSession(token, prisma)
+  const session = await validateSession(token, prisma)
+  if (session === null) return null
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { secretHash, ...sessionWithoutSecretHash } = session
+  return sessionWithoutSecretHash
 })
 
 export const setSessionTokenCookie = async (

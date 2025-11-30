@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client"
+import { Prisma } from "db/generated/client"
 
-export const withItems = Prisma.validator<Prisma.CartInclude>()({
+export const withItems = {
   items: {
     orderBy: { createdAt: "desc" },
     include: {
@@ -10,4 +10,4 @@ export const withItems = Prisma.validator<Prisma.CartInclude>()({
       ingredients: true,
     },
   },
-})
+} satisfies Prisma.CartInclude

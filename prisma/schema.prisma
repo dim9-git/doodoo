@@ -1,10 +1,10 @@
 datasource db {
-  url      = env("DATABASE_URL")
   provider = "postgresql"
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated"
 }
 
 model Session {
@@ -164,4 +164,22 @@ model VerificationCode {
   userId Int?  @unique
 
   @@unique([code, userId])
+}
+
+model Story {
+  createdAt       DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+  previewImageUrl String
+
+  items StoryItem[]
+}
+
+model StoryItem {
+  createdAt DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+
+  storyId Int
+  story   Story @relation(fields: [storyId], references: [id])
+
+  sourceUrl String
 }

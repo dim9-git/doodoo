@@ -1,29 +1,28 @@
-import { Prisma, PrismaClient } from "@prisma/client"
+import { PrismaClient } from "db/generated/client"
 import { prisma as prismaInstance } from "db/prisma"
 
-import { deleteSession } from "./delete-session"
+import { withUser } from "../model/relations"
 
-export const getSession = async (
-  sessionId: string,
-  pc?: PrismaClient
-): Promise<Prisma.SessionGetPayload<Prisma.SessionDefaultArgs> | null> => {
+export const getSession = async (sessionId: string, pc?: PrismaClient) => {
   const prisma = pc || prismaInstance
-  const now = new Date()
 
-  const session = await prisma.session.findUnique({
+  return await prisma.session.findUnique({
     where: {
       id: sessionId,
     },
   })
+}
 
-  if (session === null) {
-    return null
-  }
+export const getSessionWithUser = async (
+  sessionId: string,
+  pc?: PrismaClient
+) => {
+  const prisma = pc || prismaInstance
 
-  if (now.getTime() >= session.expiresAt.getTime()) {
-    await deleteSession(sessionId, pc)
-    return null
-  }
-
-  return session
+  return await prisma.session.findUnique({
+    where: {
+      id: sessionId,
+    },
+    include: withUser,
+  })
 }

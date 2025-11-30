@@ -1,6 +1,6 @@
 "use client"
 
-import { Ingredient, ProductItem } from "@prisma/client"
+import { Ingredient, ProductItem } from "db/generated/client"
 
 import { Button, Title, cn } from "@/shared"
 
@@ -80,12 +80,12 @@ export default function BuildPizzaForm({
   }
 
   return (
-    <div className={cn("flex flex-1", className)}>
-      <div className="flex items-center justify-center flex-1 relative w-full">
+    <div className={cn("flex flex-1 max-lg:flex-col", className)}>
+      <div className="flex items-center justify-center flex-1 relative w-full max-lg:w-[400px] max-lg:hidden">
         <ProductCover coverUrl={coverUrl} size={size} />
       </div>
 
-      <div className="w-[490px] bg-[#f7f6f5] p-7">
+      <div className="w-full lg:w-[490px] bg-[#f7f6f5] p-7">
         <Title text={name} size="md" className="font-extrabold mb-1" />
 
         <p className="text-sm text-gray-500 mb-1">{text}</p>

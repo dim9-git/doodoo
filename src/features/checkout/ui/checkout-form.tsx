@@ -1,9 +1,13 @@
 "use client"
 
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { useCart } from "@/entities/cart"
+
+import { useSession } from "@/features/auth"
 
 import CheckoutCart from "./checkout-cart"
 import CheckoutAddressFields from "./checkout-address-fields"
@@ -11,21 +15,38 @@ import CheckoutPersonalFields from "./checkout-personal-fields"
 import { CheckoutSidebar } from "./checkout-sidebar"
 import { CheckoutFormValues, checkoutFormSchema } from "../model/schema"
 import { usePlaceOrder } from "../model/use-place-order"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function CheckoutForm() {
+  const router = useRouter()
+
+  const { session } = useSession()
+
   const { cart, isLoading, setIsUpdating, isUpdating } = useCart()
   const cartItems = cart?.items ?? []
   const totalAmount = cart?.total ?? 0
 
-  const router = useRouter()
+  const { placeOrderAsync, isPending: isPlacingOrder } = usePlaceOrder()
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
+    defaultValues: {
+      firstName: session?.user?.firstName ?? "",
+      lastName: session?.user?.lastName ?? "",
+      email: session?.user?.email ?? "", 
+    },
   })
 
-  const { placeOrderAsync, isPending: isPlacingOrder } = usePlaceOrder()
+  useEffect(() => {
+    if (session?.user) {
+      form.reset({
+        firstName: session.user.firstName ?? "",
+        lastName: session.user.lastName ?? "",
+        email: session.user.email ?? "",
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
 
   const onSubmit = async (data: CheckoutFormValues) => {
     await placeOrderAsync(data, {

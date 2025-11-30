@@ -1,6 +1,10 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "db/generated/client"
 
-import { createSession, getSession, Session } from "@/entities/session"
+import {
+  createSession,
+  deleteSession,
+  getSessionWithUser,
+} from "@/entities/session"
 
 import {
   constantTimeEqual,
@@ -43,27 +47,29 @@ export const createSessionToken = async (
   return { token, expiresAt }
 }
 
-export const validateSession = async (
-  token: string,
-  pc?: PrismaClient
-): Promise<Session | null> => {
+export const validateSession = async (token: string, pc?: PrismaClient) => {
+  const now = new Date()
+
   const tokenParts = token.split(".")
   if (tokenParts.length !== 2) {
     return null
   }
-
   const sessionId = tokenParts[0]
   const sessionSecret = tokenParts[1]
 
-  const session = await getSession(sessionId, pc)
-  if (!session) {
+  const session = await getSessionWithUser(sessionId, pc)
+  if (session === null) {
+    return null
+  }
+
+  if (now.getTime() >= session.expiresAt.getTime()) {
+    await deleteSession(sessionId, pc)
     return null
   }
 
   const tokenSecretHash = await hashSecret(sessionSecret)
 
   const validSecret = constantTimeEqual(tokenSecretHash, session.secretHash)
-
   if (!validSecret) {
     return null
   }

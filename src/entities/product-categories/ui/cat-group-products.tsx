@@ -30,7 +30,7 @@ export default function CatGroupProducts({
   const intersection = useIntersection(
     intersectionRef as React.RefObject<HTMLElement>,
     {
-      threshold: 0.5,
+      threshold: 0.3,
     }
   )
 
@@ -44,7 +44,12 @@ export default function CatGroupProducts({
     <div className={classNames?.container} id={title} ref={intersectionRef}>
       <Title text={title} size="lg" className="font-extrabold" />
 
-      <div className={cn("grid grid-cols-3 gap-12", classNames?.list)}>
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-12",
+          classNames?.list
+        )}
+      >
         {products.map((product, idx) => (
           <ProductCard
             key={`product-${idx}`}

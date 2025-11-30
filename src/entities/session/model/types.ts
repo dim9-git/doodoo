@@ -1,13 +1,9 @@
-// export interface Session {
-//   id: string
-//   secretHash: Uint8Array // Uint8Array is a byte array
-//   createdAt: Date
-// }
+import { Prisma, Session as PrismaSession } from "db/generated/client"
 
-import { Session } from "@prisma/client"
+import { withUser } from "./relations"
 
-export interface SessionWithToken extends Session {
-  token: string
-}
+export type Session = PrismaSession
 
-export { type Session }
+export type SessionWithUser = Prisma.SessionGetPayload<{
+  include: typeof withUser
+}>

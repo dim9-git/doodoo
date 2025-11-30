@@ -10,8 +10,8 @@ import {
   DialogHeader,
 } from "@/shared"
 
-import LoginForm from "../../../features/auth/ui/login-form"
-import RegisterForm from "../../../features/auth/ui/register-form"
+import { LoginForm, RegisterForm } from "@/features/auth"
+
 import { GOOGLE_LOGIN_URL } from "../model/constants"
 
 type AuthType = "login" | "register"

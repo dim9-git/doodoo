@@ -1,4 +1,4 @@
-import { ProductItem } from "@prisma/client"
+import { ProductItem } from "db/generated/client"
 
 import { Title, Button, cn } from "@/shared"
 

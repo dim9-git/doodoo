@@ -8,7 +8,7 @@ export {
 export { getCart } from "./api/get-cart"
 export * from "./api/find-by-token"
 
-export * from "./model/cart.relations"
+export * from "./model/relations"
 export * from "./model/use-cart"
 
 export * from "./lib/find-cart-item"

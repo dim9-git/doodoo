@@ -1,5 +1,4 @@
 import Image from "next/image"
-
 import { CircleCheck } from "lucide-react"
 
 import { cn } from "@/shared"
@@ -43,7 +42,10 @@ export default function IngredientItem({
         />
       ) : null}
       <span className="text-xs mb-1">{name}</span>
-      <span className="font-bold">{price} ₸</span>
+
+      <div className="flex flex-col mt-auto">
+        <span className="font-bold">{price} ₸</span>
+      </div>
     </div>
   )
 }

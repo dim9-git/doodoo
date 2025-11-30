@@ -61,7 +61,7 @@ export default function Filters({ className }: Props) {
       </div>
 
       {/* Price */}
-      <div className="mt-5 border-y border-y-neutral-200 py-5 pb-7 max-xl:min-w-[300px]">
+      <div className="mt-5 lg:border-y border-y-neutral-200 py-5 pb-7 max-xl:min-w-[300px]">
         <p className="text-base font-bold">Цена (от и до)</p>
         <div className="flex items-center gap-3 mt-3">
           <Input
